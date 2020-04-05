@@ -16,7 +16,8 @@ var mineBoxArray = new Array(sqX);
 let miningArray = [];
 let debug = true;
 let fr = 10;
-
+let flagSrc = "../img/flag-svgrepo-com.svg";
+let flagImg;
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -43,6 +44,10 @@ var shuffle = function (array) {
 	return array;
 
 };
+
+function preload() {
+  flagImg = loadImage(flagSrc);
+}
 
 function createGame() {
 	
@@ -87,10 +92,7 @@ function createGame() {
 						//console.log(i, k, " Accessing ", xMin, yMin);
 						if (mineBoxArray[xMin][yMin].mine)
 						{
-							//console.log("Mine found");
-							//console.log(mineBoxArray[i][k]);
 							mineBoxArray[i][k].incrementMinesAdj();
-							//console.log(mineBoxArray[i][k]);
 						}
 
 					}
@@ -119,16 +121,23 @@ function setup() {
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
 function mousePressed() {
-  if(mouseButton == LEFT)
+  
+  let x = Math.floor(mouseX / sqSize);
+  let y = Math.floor(mouseY / sqSize);
+  if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
-	  let x = Math.floor(mouseX / sqSize);
-	  let y = Math.floor(mouseY / sqSize);
-	  //console.log("Mouse pressed at:", x, y); 
-	  if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
+	  if(mouseButton == LEFT)
 	  {
-	  	propagateClick(x, y);
+		  //console.log("Mouse pressed at:", x, y);   
+		propagateClick(x, y);
+		  
+	  } 
+	  if(mouseButton == RIGHT)
+	  {
+	  	 //place flag
+	  	 mineBoxArray[x][y].flag();
 	  }
-  } 
+  }
 }
 
 function mouseReleased() {

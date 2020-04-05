@@ -52,6 +52,9 @@ class mineBox {
 		}
 		rectMode(CORNER);
 		square(this._x, this._y, sqSize);
+		if(this._flagged == true && this._isOpen == false) {
+			image(flagImg, this._x, this._y, sqSize, sqSize);
+		}
 		rectMode(RADIUS);
 		if(this._minesAdj > 0 && this._isOpen == true) {
 			switch(this._minesAdj) {
@@ -112,6 +115,17 @@ class mineBox {
 
 	get mine() {
 		return this._mine;
+	}
+
+	get isFlagged() {
+		return this._flagged;
+	}
+
+	flag() {
+		if (this._isOpen == false)
+		{
+			this._flagged = !this._flagged;
+		}
 	}
 
 
