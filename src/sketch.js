@@ -14,7 +14,7 @@ const sqSize = 25;
 let cnv;
 var mineBoxArray = new Array(sqX);
 let miningArray = [];
-let debug = false;
+let debug = true;
 let fr = 10;
 let flagSrc = "../img/flag-svgrepo-com.svg";
 let mineSrc = "../img/rg1024_sea_mine.svg";
@@ -25,6 +25,9 @@ let mineImg;
 let shipImg;
 let flagImg;
 let gameOver;
+let win;
+let openBoxes = 0;
+let minesLeft = 0;
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -60,6 +63,8 @@ function preload() {
 
 function createGame() {
 	gameOver = false;
+	win = false;
+	openBoxes = sqX * sqY;
 	let counter = 0;
 	for (let i = 0; i < sqX; i++) 
 	{
@@ -83,6 +88,7 @@ function createGame() {
 		//console.log("Planting mine at: ", mine);
 		mineBoxArray[int(mine[0])][int(mine[1])].mine = true;
 	}
+	minesLeft = mines;
 
 	/*Calculate adjacent mines*/
 	for (let i = 0; i < sqX; i++) 
@@ -135,6 +141,7 @@ function setup() {
   let counter = createGame();
   console.log("Mineboxes created: " + counter);
   cnv.mousePressed();
+  noLoop();
   
 }
 
@@ -148,7 +155,7 @@ function keyTyped() {
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
 function mousePressed() {
-  
+  loop();
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
@@ -168,10 +175,22 @@ function mousePressed() {
 		  	 if (mineBoxArray[x][y].isFlagged) 
 		  	 {
 		  	 	scanAdjacent(x,y,"flagAdd");
+		  	 	if (mineBoxArray[x][y].mine)
+		  	 	{
+		  	 		minesLeft--;
+		  	 		openBoxes--;
+		  	 	}
+		  	 	
 		  	 }
 		  	 else
 		  	 {
 		  	 	scanAdjacent(x,y,"flagRemove");
+		  	 	if (mineBoxArray[x][y].mine)
+		  	 	{
+		  	 		minesLeft++;
+		  	 		openBoxes++;
+		  	 	}
+		  	 	
 		  	 }
 		  }
 		  else if (mouseButton == CENTER)
@@ -188,6 +207,10 @@ function mousePressed() {
 					let mine = str(miningArray[i]).split(" ");
 					mineBoxArray[int(mine[0])][int(mine[1])].clicked();
 				}
+			} else if (openBoxes == minesLeft)
+			{
+				win = true;
+				console.log(openBoxes, minesLeft);
 			}
 	  }
   }
@@ -197,6 +220,7 @@ function mouseReleased() {
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
   //console.log("Mouse released at:", x, y);
+  noLoop();
 }
 
 /*
@@ -209,6 +233,7 @@ function propagateClick(x, y, middle=false) {
     	if (middle == false || middle == true && mBA.flagsAdj >= mBA.minesAdj)
     	{
     		mBA.clicked();
+    		openBoxes--;
     	}
 	  	if ((mBA.minesAdj == 0 && mBA.mine == false) || 
 	  		(middle && mBA.flagsAdj >= mBA.minesAdj))
@@ -254,6 +279,15 @@ function draw() {
 	fill(color("black"));
 	rectMode(RADIUS);
 	text("Game Over", 0,0, min(shipX, canvasX), min(shipY,canvasY));
+  } else if (win) {
+  	tint(255, 100);
+  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY));
+  	textAlign(CENTER, CENTER);
+	textStyle(BOLD);
+	textSize(50);
+	fill(color("black"));
+	rectMode(RADIUS);
+	text("You Win", 0,0, min(shipX, canvasX), min(shipY,canvasY));
   }
   
 }
