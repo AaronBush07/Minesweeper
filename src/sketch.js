@@ -14,13 +14,17 @@ const sqSize = 25;
 let cnv;
 var mineBoxArray = new Array(sqX);
 let miningArray = [];
-let debug = true;
+let debug = false;
 let fr = 10;
 let flagSrc = "../img/flag-svgrepo-com.svg";
 let mineSrc = "../img/rg1024_sea_mine.svg";
+let shipSrc = "../img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
+let shipX = 640;
+let shipY = 425;
 let mineImg;
+let shipImg;
 let flagImg;
-let gameOver = false;
+let gameOver;
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -51,10 +55,11 @@ var shuffle = function (array) {
 function preload() {
   flagImg = loadImage(flagSrc);
   mineImg = loadImage(mineSrc);
+  shipImg = loadImage(shipSrc);
 }
 
 function createGame() {
-	
+	gameOver = false;
 	let counter = 0;
 	for (let i = 0; i < sqX; i++) 
 	{
@@ -75,7 +80,7 @@ function createGame() {
 	for (let i = 0; i < mines; i++)
 	{
 		let mine = str(miningArray[i]).split(" ");
-		console.log("Planting mine at: ", mine);
+		//console.log("Planting mine at: ", mine);
 		mineBoxArray[int(mine[0])][int(mine[1])].mine = true;
 	}
 
@@ -117,7 +122,7 @@ function scanAdjacent(x, y, scanType) {
 				mineBoxArray[xMin][yMin].reduceFlagAdj();
 			} else if (scanType == "flagAdd") {
 				mineBoxArray[xMin][yMin].incrementFlagAdj();
-				console.log("Flags added", xMin,yMin,mineBoxArray[x][y].flagsAdj);
+				//console.log("Flags added", xMin,yMin,mineBoxArray[x][y].flagsAdj);
 			}
 		}
 	}
@@ -131,6 +136,14 @@ function setup() {
   console.log("Mineboxes created: " + counter);
   cnv.mousePressed();
   
+}
+
+function keyTyped() {
+	if (key === 'r' || key === 'R') {
+		console.log("Game reset");
+		let counter = createGame();
+  		console.log("Mineboxes created: " + counter);
+	}
 }
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
@@ -164,7 +177,7 @@ function mousePressed() {
 		  else if (mouseButton == CENTER)
 		  {
 		  	
-		  	console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
+		  	//console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
 		  	propagateClick(x, y, true)
 		  }
 
@@ -231,6 +244,16 @@ function draw() {
 		//console.log(i,k);
 		mineBoxArray[i][k].display();
 	}
+  }
+  if (gameOver) {
+  	tint(255, 100);
+  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY));
+  	textAlign(CENTER, CENTER);
+	textStyle(BOLD);
+	textSize(50);
+	fill(color("black"));
+	rectMode(RADIUS);
+	text("Game Over", 0,0, min(shipX, canvasX), min(shipY,canvasY));
   }
   
 }
