@@ -42,7 +42,7 @@ class mineBox {
 		else
 		{
 			if (this._minesAdj == 0) {
-			  fill(color("darkseagreen"));
+			  fill(color("aquamarine"));
 			}
 			else {
 				fill(color("lightgreen"));
