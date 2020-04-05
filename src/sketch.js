@@ -17,7 +17,10 @@ let miningArray = [];
 let debug = true;
 let fr = 10;
 let flagSrc = "../img/flag-svgrepo-com.svg";
+let mineSrc = "../img/rg1024_sea_mine.svg";
+let mineImg;
 let flagImg;
+let gameOver = false;
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -47,6 +50,7 @@ var shuffle = function (array) {
 
 function preload() {
   flagImg = loadImage(flagSrc);
+  mineImg = loadImage(mineSrc);
 }
 
 function createGame() {
@@ -126,16 +130,27 @@ function mousePressed() {
   let y = Math.floor(mouseY / sqSize);
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
-	  if(mouseButton == LEFT)
-	  {
-		  //console.log("Mouse pressed at:", x, y);   
-		propagateClick(x, y);
-		  
-	  } 
-	  if(mouseButton == RIGHT)
-	  {
-	  	 //place flag
-	  	 mineBoxArray[x][y].flag();
+  	  if (gameOver == false)
+  	  {
+		  if(mouseButton == LEFT)
+		  {
+			  //console.log("Mouse pressed at:", x, y);   
+			propagateClick(x, y);
+			if (gameOver == true)
+			{
+				for (let i = 0; i < mines; i++) 
+				{
+					let mine = str(miningArray[i]).split(" ");
+					mineBoxArray[int(mine[0])][int(mine[1])].clicked();
+				}
+			}  
+
+		  } 
+		  if(mouseButton == RIGHT)
+		  {
+		  	 //place flag
+		  	 mineBoxArray[x][y].flag();
+		  }
 	  }
   }
 }
@@ -143,17 +158,18 @@ function mousePressed() {
 function mouseReleased() {
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
-  console.log("Mouse released at:", x, y);
+  //console.log("Mouse released at:", x, y);
 }
 
 /*
 Recursive function to look for open spaces when they are clicked. 
 */
 function propagateClick(x, y) {
-	if(mineBoxArray[x][y].isOpen == false)
+	let mBA = mineBoxArray[x][y];
+	if(mBA.isOpen == false && mBA.isFlagged == false)
     {
-    	mineBoxArray[x][y].clicked();
-	  	if (mineBoxArray[x][y].minesAdj == 0 && mineBoxArray[x][y].mine == false)
+    	mBA.clicked();
+	  	if (mBA.minesAdj == 0 && mBA.mine == false)
 	  	{
 	  		for (let xMin = x-1; xMin <= x+1; xMin++)
 			{
@@ -167,8 +183,12 @@ function propagateClick(x, y) {
 				}
 			}
 	  		
+	  	} else if (mBA.mine == true)
+	  	{
+	  		gameOver = true;
 	  	}  
 	}
+
 }
 
 

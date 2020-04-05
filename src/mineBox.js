@@ -54,6 +54,9 @@ class mineBox {
 		square(this._x, this._y, sqSize);
 		if(this._flagged == true && this._isOpen == false) {
 			image(flagImg, this._x, this._y, sqSize, sqSize);
+		} else if (this._flagged == false && this._isOpen == true && this._mine == true)
+		{
+			image(mineImg, this._x, this._y, sqSize, sqSize);
 		}
 		rectMode(RADIUS);
 		if(this._minesAdj > 0 && this._isOpen == true) {
@@ -83,13 +86,10 @@ class mineBox {
 			text(str(this._minesAdj), this._x, this._y, sqSize, sqSize);
 		}
 		strokeWeight(1);
-		//let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
-		//let debugText = str(this._mine) + " M:" + this._minesAdj;
-		//text(debugText, this._x, this._y);
 	}
 
 	clicked() {
-		console.log("Hey I was clicked");
+		//console.log("Hey I was clicked");
 		this._isOpen = true;
 	}
 
