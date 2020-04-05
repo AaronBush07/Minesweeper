@@ -11,6 +11,7 @@ class mineBox {
 		this._x = x;
 		this._y = y;
 		this._state = 0;
+		this._flagged = false;
 		this._mine = false;
 		this._isOpen = false;
 		this._minesAdj = 0;
@@ -21,16 +22,17 @@ class mineBox {
 	display()
 	{
 		//console.log(this._x, this._y);
-		if (this._leftMouse == false)
+		if (this._isOpen == false)
 		{
-			color("white");
+			fill(color("white"));
 			square(this._x, this._y, sqSize);
 		}
 		else
 		{
-			color("green");
+			fill(color("lightgreen"));
 			square(this._x, this._y, sqSize);
 		}
+		fill(color("black"));
 		textAlign(LEFT, TOP);
 		let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
 		text(debugText, this._x, this._y);
@@ -38,6 +40,7 @@ class mineBox {
 
 	clicked() {
 		console.log("Hey I was clicked");
+		this._isOpen = true;
 	}
 
 	set mine(value) {
