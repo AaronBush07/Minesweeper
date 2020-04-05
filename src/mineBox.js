@@ -27,6 +27,12 @@ class mineBox {
 			fill(color("white"));
 			square(this._x, this._y, sqSize);
 		}
+
+		else if (this._mine == true)
+		{
+			fill(color("red"));
+			square(this._x, this._y, sqSize);
+		}
 		else
 		{
 			fill(color("lightgreen"));
@@ -56,7 +62,11 @@ class mineBox {
 	}
 
 	get minesAdj() {
-		return _minesAdj;
+		return this._minesAdj;
+	}
+
+	get isOpen() {
+		return this._isOpen;
 	}
 
 	get mine() {

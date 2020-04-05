@@ -58,13 +58,13 @@ function createGame() {
 	/*
 	Shuffle the mining array. Then populate with mines. 
 	*/
-	console.dir(miningArray);
+	//console.dir(miningArray);
 	miningArray = shuffle(miningArray);
-	console.dir(miningArray);
+	//console.dir(miningArray);
 	for (let i = 0; i < mines; i++)
 	{
 		let mine = str(miningArray[i]).split(" ");
-		console.log(mine);
+		console.log("Planting mine at: ", mine);
 		mineBoxArray[int(mine[0])][int(mine[1])].mine = true;
 	}
 
@@ -82,10 +82,10 @@ function createGame() {
 					{
 						if (yMin < 0 || yMin >= sqY) continue
 						if (xMin == i && yMin == k) continue
-						console.log(i, k, " Accessing ", xMin, yMin);
+						//console.log(i, k, " Accessing ", xMin, yMin);
 						if (mineBoxArray[xMin][yMin].mine)
 						{
-							console.log("Mine found");
+							//console.log("Mine found");
 							//console.log(mineBoxArray[i][k]);
 							mineBoxArray[i][k].incrementMinesAdj();
 							//console.log(mineBoxArray[i][k]);
@@ -116,7 +116,7 @@ function mousePressed() {
   console.log("Mouse pressed at:", x, y); 
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
-  	mineBoxArray[x][y].clicked();
+  	propagateClick(x, y);
   } 
 }
 
@@ -124,6 +124,28 @@ function mouseReleased() {
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
   console.log("Mouse released at:", x, y);
+}
+
+function propagateClick(x, y) {
+	if(mineBoxArray[x][y].isOpen == false)
+    {
+    	mineBoxArray[x][y].clicked();
+	  	if (mineBoxArray[x][y].minesAdj == 0 && mineBoxArray[x][y].mine == false)
+	  	{
+	  		for (let xMin = x-1; xMin <= x+1; xMin++)
+			{
+				if (xMin < 0 || xMin >= sqX) continue
+				for (let yMin = y-1; yMin <= y+1; yMin++)
+				{
+					if (yMin < 0 || yMin >= sqY) continue
+					if (xMin == x && yMin == y) continue
+					//console.log(i, k, " Accessing ", xMin, yMin);
+					propagateClick(xMin,yMin);
+				}
+			}
+	  		
+	  	}  
+	}
 }
 
 
