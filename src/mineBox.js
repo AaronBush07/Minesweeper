@@ -25,6 +25,18 @@ class mineBox {
 		if (this._isOpen == false)
 		{
 			fill(color("white"));
+			if (debug == true)
+			{
+				if (this._mine == true)
+				{
+					fill(color("papayawhip"));
+				}
+				else if (this._minesAdj == 0)
+				{
+					fill(color("gainsboro"));
+				}
+			}
+
 			square(this._x, this._y, sqSize);
 		}
 
@@ -35,13 +47,19 @@ class mineBox {
 		}
 		else
 		{
-			fill(color("lightgreen"));
+			if (this._minesAdj == 0){
+			  fill(color("darkseagreen"));
+			}
+			else {
+				fill(color("lightgreen"));
+			}
 			square(this._x, this._y, sqSize);
 		}
 		fill(color("black"));
 		textAlign(LEFT, TOP);
-		let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
-		text(debugText, this._x, this._y);
+		//let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
+		//let debugText = str(this._mine) + " M:" + this._minesAdj;
+		//text(debugText, this._x, this._y);
 	}
 
 	clicked() {

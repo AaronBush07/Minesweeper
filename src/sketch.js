@@ -7,13 +7,14 @@ https://github.com/AaronBush07
 
 const canvasX = 500;
 const canvasY = 800;
-const mines = 10;
-const sqX = 5;
-const sqY = 8;
-const sqSize = 100;
+const mines = 100;
+const sqX = 20;
+const sqY = 32;
+const sqSize = 25;
 let cnv;
 var mineBoxArray = new Array(sqX);
 let miningArray = [];
+let debug = true;
 
 /**
  * Randomly shuffle an array
@@ -100,6 +101,10 @@ function createGame() {
    return counter;
 }
 
+document.oncontextmenu = function(event) {
+  event.preventDefault();
+  return false;
+}
 
 function setup() {
   // put setup code here
@@ -107,16 +112,20 @@ function setup() {
   let counter = createGame();
   console.log("Mineboxes created: " + counter);
   cnv.mousePressed();
+  
 }
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
 function mousePressed() {
-  let x = Math.floor(mouseX / sqSize);
-  let y = Math.floor(mouseY / sqSize);
-  console.log("Mouse pressed at:", x, y); 
-  if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
+  if(mouseButton == LEFT)
   {
-  	propagateClick(x, y);
+	  let x = Math.floor(mouseX / sqSize);
+	  let y = Math.floor(mouseY / sqSize);
+	  //console.log("Mouse pressed at:", x, y); 
+	  if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
+	  {
+	  	propagateClick(x, y);
+	  }
   } 
 }
 
@@ -126,6 +135,9 @@ function mouseReleased() {
   console.log("Mouse released at:", x, y);
 }
 
+/*
+Recursive function to look for open spaces when they are clicked. 
+*/
 function propagateClick(x, y) {
 	if(mineBoxArray[x][y].isOpen == false)
     {
