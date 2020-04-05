@@ -32,7 +32,8 @@ class mineBox {
 			square(this._x, this._y, sqSize);
 		}
 		textAlign(LEFT, TOP);
-		text(this._x + "," + this._y, this._x, this._y);
+		let debugText = this._x + "," + this._y + " " + str(this._mine);
+		text(debugText, this._x, this._y);
 	}
 
 	clicked() {
@@ -40,7 +41,7 @@ class mineBox {
 	}
 
 	set mine(value) {
-		this._mine = true;
+		this._mine = value;
 	}
 
 	get mine() {
