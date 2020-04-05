@@ -1,17 +1,12 @@
 class mineBox {
-	/*
-		state: 
-			blank: 0;
-			mined: 1;
-			number: 2;
-	*/
+	
 	constructor(x, y)
 	{
 		//initial state of the box. 
 		this._x = x;
 		this._y = y;
-		this._state = 0;
 		this._flagged = false;
+		this._flagsAdj = 0; //How many flagged boxes adjacent
 		this._mine = false;
 		this._isOpen = false;
 		this._minesAdj = 0;
@@ -39,7 +34,10 @@ class mineBox {
 		}
 		else if (this._mine == true)
 		{
-			fill(color("red"));
+			if(this._flagged)
+				fill(color("white"));
+			else 
+				fill(color("red"));
 		}
 		else
 		{
@@ -52,7 +50,7 @@ class mineBox {
 		}
 		rectMode(CORNER);
 		square(this._x, this._y, sqSize);
-		if(this._flagged == true && this._isOpen == false) {
+		if(this._flagged == true) {
 			image(flagImg, this._x, this._y, sqSize, sqSize);
 		} else if (this._flagged == false && this._isOpen == true && this._mine == true)
 		{
@@ -105,6 +103,14 @@ class mineBox {
 		this._minesAdj++;
 	}
 
+	reduceFlagAdj() {
+		this._flagsAdj--;
+	}
+
+	incrementFlagAdj() {
+		this._flagsAdj++;
+	}
+
 	get minesAdj() {
 		return this._minesAdj;
 	}
@@ -119,6 +125,10 @@ class mineBox {
 
 	get isFlagged() {
 		return this._flagged;
+	}
+
+	get flagsAdj() {
+		return this._flagsAdj;
 	}
 
 	flag() {

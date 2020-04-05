@@ -86,21 +86,7 @@ function createGame() {
 		{
 			/*If no mines present in selected box*/
 			if (mineBoxArray[i][k].mine == false) {
-				for (let xMin = i-1; xMin <= i+1; xMin++)
-				{
-					if (xMin < 0 || xMin >= sqX) continue
-					for (let yMin = k-1; yMin <= k+1; yMin++)
-					{
-						if (yMin < 0 || yMin >= sqY) continue
-						if (xMin == i && yMin == k) continue
-						//console.log(i, k, " Accessing ", xMin, yMin);
-						if (mineBoxArray[xMin][yMin].mine)
-						{
-							mineBoxArray[i][k].incrementMinesAdj();
-						}
-
-					}
-				}
+				scanAdjacent(i, k, "mine");
 			}
 		}
 	}
@@ -111,6 +97,30 @@ function createGame() {
 document.oncontextmenu = function(event) {
   event.preventDefault();
   return false;
+}
+
+function scanAdjacent(x, y, scanType) {
+	for (let xMin = x-1; xMin <= x+1; xMin++)
+	{
+		if (xMin < 0 || xMin >= sqX) continue
+		for (let yMin = y-1; yMin <= y+1; yMin++)
+		{
+			if (yMin < 0 || yMin >= sqY) continue
+			if (xMin == x && yMin == y) continue
+			if (scanType == "mine")
+			{
+				if (mineBoxArray[xMin][yMin].mine)
+				{
+					mineBoxArray[x][y].incrementMinesAdj();
+				}
+			} else if (scanType == "flagRemove") {
+				mineBoxArray[xMin][yMin].reduceFlagAdj();
+			} else if (scanType == "flagAdd") {
+				mineBoxArray[xMin][yMin].incrementFlagAdj();
+				console.log("Flags added", xMin,yMin,mineBoxArray[x][y].flagsAdj);
+			}
+		}
+	}
 }
 
 function setup() {
@@ -135,22 +145,37 @@ function mousePressed() {
 		  if(mouseButton == LEFT)
 		  {
 			  //console.log("Mouse pressed at:", x, y);   
-			propagateClick(x, y);
-			if (gameOver == true)
+			propagateClick(x, y);  
+
+		  } else 
+		  if(mouseButton == RIGHT)
+		  {
+		  	 //place flag
+		  	 mineBoxArray[x][y].flag();
+		  	 if (mineBoxArray[x][y].isFlagged) 
+		  	 {
+		  	 	scanAdjacent(x,y,"flagAdd");
+		  	 }
+		  	 else
+		  	 {
+		  	 	scanAdjacent(x,y,"flagRemove");
+		  	 }
+		  }
+		  else if (mouseButton == CENTER)
+		  {
+		  	
+		  	console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
+		  	propagateClick(x, y, true)
+		  }
+
+		  if (gameOver == true)
 			{
 				for (let i = 0; i < mines; i++) 
 				{
 					let mine = str(miningArray[i]).split(" ");
 					mineBoxArray[int(mine[0])][int(mine[1])].clicked();
 				}
-			}  
-
-		  } 
-		  if(mouseButton == RIGHT)
-		  {
-		  	 //place flag
-		  	 mineBoxArray[x][y].flag();
-		  }
+			}
 	  }
   }
 }
@@ -164,12 +189,16 @@ function mouseReleased() {
 /*
 Recursive function to look for open spaces when they are clicked. 
 */
-function propagateClick(x, y) {
+function propagateClick(x, y, middle=false) {
 	let mBA = mineBoxArray[x][y];
-	if(mBA.isOpen == false && mBA.isFlagged == false)
+	if((mBA.isOpen == false && mBA.isFlagged == false) || middle)
     {
-    	mBA.clicked();
-	  	if (mBA.minesAdj == 0 && mBA.mine == false)
+    	if (middle == false || middle == true && mBA.flagsAdj >= mBA.minesAdj)
+    	{
+    		mBA.clicked();
+    	}
+	  	if ((mBA.minesAdj == 0 && mBA.mine == false) || 
+	  		(middle && mBA.flagsAdj >= mBA.minesAdj))
 	  	{
 	  		for (let xMin = x-1; xMin <= x+1; xMin++)
 			{
@@ -178,12 +207,12 @@ function propagateClick(x, y) {
 				{
 					if (yMin < 0 || yMin >= sqY) continue
 					if (xMin == x && yMin == y) continue
-					//console.log(i, k, " Accessing ", xMin, yMin);
-					propagateClick(xMin,yMin);
+					propagateClick(xMin,yMin, false);
 				}
 			}
 	  		
-	  	} else if (mBA.mine == true)
+	  	} 
+	  	else if (mBA.mine)
 	  	{
 	  		gameOver = true;
 	  	}  
