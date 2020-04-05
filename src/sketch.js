@@ -14,7 +14,7 @@ const sqSize = 25;
 let cnv;
 var mineBoxArray = new Array(sqX);
 let miningArray = [];
-let debug = true;
+let debug = false;
 let fr = 10;
 let flagSrc = "../img/flag-svgrepo-com.svg";
 let mineSrc = "../img/rg1024_sea_mine.svg";
