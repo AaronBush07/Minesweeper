@@ -15,6 +15,7 @@ let cnv;
 var mineBoxArray = new Array(sqX);
 let miningArray = [];
 let debug = true;
+let fr = 10;
 
 /**
  * Randomly shuffle an array
@@ -108,6 +109,7 @@ document.oncontextmenu = function(event) {
 
 function setup() {
   // put setup code here
+  frameRate(fr);
   cnv = createCanvas(canvasX, canvasY);
   let counter = createGame();
   console.log("Mineboxes created: " + counter);

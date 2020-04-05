@@ -36,27 +36,50 @@ class mineBox {
 					fill(color("gainsboro"));
 				}
 			}
-
-			square(this._x, this._y, sqSize);
 		}
-
 		else if (this._mine == true)
 		{
 			fill(color("red"));
-			square(this._x, this._y, sqSize);
 		}
 		else
 		{
-			if (this._minesAdj == 0){
+			if (this._minesAdj == 0) {
 			  fill(color("darkseagreen"));
 			}
 			else {
 				fill(color("lightgreen"));
 			}
-			square(this._x, this._y, sqSize);
 		}
-		fill(color("black"));
-		textAlign(LEFT, TOP);
+		rectMode(CORNER);
+		square(this._x, this._y, sqSize);
+		rectMode(RADIUS);
+		if(this._minesAdj > 0 && this._isOpen == true) {
+			switch(this._minesAdj) {
+				case 1: fill(color("blue"));
+						break;
+				case 2: fill(color("red"));
+						break;
+				case 3: fill(color("green"));
+						break;
+				case 4: fill(color("gold"));
+						break;
+				case 5: fill(color("magenta"));
+						break;
+				case 6: fill(color("sienna"));
+						break;
+				case 7: fill(color("pink"));
+						break;
+				case 8: fill(color("black"));
+						break;
+				default: fill(0, 102, 153);
+			}
+			
+			textAlign(CENTER, CENTER);
+			textStyle(BOLD);
+			textSize(20);
+			text(str(this._minesAdj), this._x, this._y, sqSize, sqSize);
+		}
+		strokeWeight(1);
 		//let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
 		//let debugText = str(this._mine) + " M:" + this._minesAdj;
 		//text(debugText, this._x, this._y);
