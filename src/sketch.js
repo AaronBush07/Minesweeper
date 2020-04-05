@@ -1,3 +1,10 @@
+/*
+Aaron Bush 
+https://github.com/AaronBush07
+2020
+*/
+
+
 const canvasX = 500;
 const canvasY = 800;
 const mines = 10;
@@ -60,6 +67,36 @@ function createGame() {
 		console.log(mine);
 		mineBoxArray[int(mine[0])][int(mine[1])].mine = true;
 	}
+
+	/*Calculate adjacent mines*/
+	for (let i = 0; i < sqX; i++) 
+	{
+		for (let k = 0; k < sqY; k++)
+		{
+			/*If no mines present in selected box*/
+			if (mineBoxArray[i][k].mine == false) {
+				for (let xMin = i-1; xMin <= i+1; xMin++)
+				{
+					if (xMin < 0 || xMin >= sqX) continue
+					for (let yMin = k-1; yMin <= k+1; yMin++)
+					{
+						if (yMin < 0 || yMin >= sqY) continue
+						if (xMin == i && yMin == k) continue
+						console.log(i, k, " Accessing ", xMin, yMin);
+						if (mineBoxArray[xMin][yMin].mine)
+						{
+							console.log("Mine found");
+							//console.log(mineBoxArray[i][k]);
+							mineBoxArray[i][k].incrementMinesAdj();
+							//console.log(mineBoxArray[i][k]);
+						}
+
+					}
+				}
+			}
+		}
+	}
+
    return counter;
 }
 

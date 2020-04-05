@@ -32,7 +32,7 @@ class mineBox {
 			square(this._x, this._y, sqSize);
 		}
 		textAlign(LEFT, TOP);
-		let debugText = this._x + "," + this._y + " " + str(this._mine);
+		let debugText = this._x + "," + this._y + " " + str(this._mine) + " M:" + this._minesAdj;
 		text(debugText, this._x, this._y);
 	}
 
@@ -42,6 +42,18 @@ class mineBox {
 
 	set mine(value) {
 		this._mine = value;
+	}
+
+	set minesAdj(value) {
+		this._minesAdj = value;
+	}
+
+	incrementMinesAdj() {
+		this._minesAdj++;
+	}
+
+	get minesAdj() {
+		return _minesAdj;
 	}
 
 	get mine() {
