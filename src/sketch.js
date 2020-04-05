@@ -1,29 +1,51 @@
-let canvasLength = 500;
-let canvasWidth = 800;
-let mines = 10;
-let sqWidth = 5;
-let sqLength = 8;
-let sqSize = 100;
+const canvasX = 500;
+const canvasY = 800;
+const mines = 10;
+const sqWidth = 5;
+const sqLength = 8;
+const sqSize = 100;
+var mineBoxArray = [];
 
 function setup() {
   // put setup code here
-  createCanvas(canvasWidth, canvasLength);
+  createCanvas(canvasX, canvasY);
   background(153);
+  createGame();
+  
+}
+
+function createGame() {
+	for(let i = 0; i < canvasX; i = i + sqSize)
+  	{
+		for(let k = 0; k < canvasY; k = k + sqSize)
+		{
+
+	    	mineBoxArray.push(new mineBox(i, k));
+	 	//console.log(i, k, sqSize);
+		}
+  }
 }
 
 function draw() {
-  // put drawing code here
-  //console.log(canvasLength);
-  //console.log(canvasWidth);
-
-  console.log(sqSize);
-  for(let i = 0; i < canvasWidth; i = i + sqSize)
+  //console.log(sqSize);
+  for (let i = 0; i < mineBoxArray.length; i++)
   {
-	for(let k = 0; k < canvasLength; k = k + sqSize)
-	{
-
-    	square(i, k, sqSize);
- 	//console.log(i, k, sqSize);
-	}
+  	mineBoxArray[i].display();
   }
+  
+}
+
+class mineBox {
+	constructor(x, y)
+	{
+		//initial state of the box. 
+		this._x = x;
+		this._y = y;
+	}
+
+	display()
+	{
+		//console.log(this._x, this._y);
+		square(this._x, this._y, sqSize);
+	}
 }
