@@ -10,6 +10,7 @@ Global variables.
 */
 let canvasX = 500;
 let canvasY = 800;
+let canvasPanelOffset = 100;
 let mines = 100;
 let sqX = 20;
 let sqY = 32;
@@ -164,7 +165,8 @@ function keyTyped() {
 function mousePressed() {
   loop();
   let x = Math.floor(mouseX / sqSize);
-  let y = Math.floor(mouseY / sqSize);
+  let y = Math.floor((mouseY-canvasPanelOffset) / sqSize);
+  console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
   	  if (gameOver == false && win == false)
@@ -271,10 +273,17 @@ function propagateClick(x, y, middle=false) {
 	//console.log(minesLeft, openBoxes);
 }
 
+function displayPanel() {
+	strokeWeight(2);
+	fill(color("white"));
+	rect(0,0,canvasX,canvasPanelOffset);
+}
+
 
 function draw() {
   //console.log(sqSize);
   background(153);
+  displayPanel();
   for (let i = 0; i < sqX; i++)
   {
   	for (let k = 0; k < sqY; k++)

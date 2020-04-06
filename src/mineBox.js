@@ -4,7 +4,7 @@ class mineBox {
 	{
 		//initial state of the box. 
 		this._x = x;
-		this._y = y;
+		this._y = y + canvasPanelOffset;
 		this._flagged = false;
 		this._flagsAdj = 0; //How many flagged boxes adjacent
 		this._mine = false;
