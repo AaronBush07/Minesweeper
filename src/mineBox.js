@@ -48,10 +48,29 @@ class mineBox {
 				fill(color("lightgreen"));
 			}
 		}
+
 		rectMode(CORNER);
 		square(this._x, this._y, sqSize);
+
 		if(this._flagged == true) {
 			image(flagImg, this._x, this._y, sqSize, sqSize);
+			//Game is over, mark wrongly placed mines. 
+			if (gameOver && this._mine == false) {
+				//X to mark wrong mine. 
+				image(mineImg, this._x, this._y, sqSize, sqSize);
+				fill(color("red"));
+				beginShape(LINES);
+				vertex(this._x, this._y);
+				vertex(this._x+sqSize, this._y+sqSize);
+				vertex(this._x+sqSize, this._y);
+				vertex(this._x, this._y+sqSize);
+				endShape();
+			} 
+			else 
+			{
+				image(flagImg, this._x, this._y, sqSize, sqSize);
+			}
+
 		} else if (this._flagged == false && this._isOpen == true && this._mine == true)
 		{
 			image(mineImg, this._x, this._y, sqSize, sqSize);
