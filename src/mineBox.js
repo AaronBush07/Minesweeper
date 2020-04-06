@@ -71,9 +71,17 @@ class mineBox {
 				image(flagImg, this._x, this._y, sqSize, sqSize);
 			}
 
-		} else if (this._flagged == false && this._isOpen == true && this._mine == true)
+		} else if (this._flagged == false && this._mine == true)
 		{
-			image(mineImg, this._x, this._y, sqSize, sqSize);
+			if (this._isOpen == true)
+			{
+				image(mineImg, this._x, this._y, sqSize, sqSize);
+			} 
+			else if (win) 
+			{
+				//auto flag when game is won.
+				image(flagImg, this._x, this._y, sqSize, sqSize);
+			}
 		}
 		rectMode(RADIUS);
 		if(this._minesAdj > 0 && this._isOpen == true) {

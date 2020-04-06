@@ -295,22 +295,22 @@ function draw() {
   }
   if (gameOver) {
   	tint(255, 100);
-  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
+  	image(shipImg, 0,canvasPanelOffset, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   	textAlign(CENTER, CENTER);
 	textStyle(BOLD);
 	textSize(50);
 	fill(color("black"));
 	rectMode(RADIUS);
-	text("Game Over", 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
+	text("Game Over", 0,canvasPanelOffset, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   } else if (win) {
   	tint(255, 100);
-  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
+  	image(shipImg, 0,canvasPanelOffset, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   	textAlign(CENTER, CENTER);
 	textStyle(BOLD);
 	textSize(50);
 	fill(color("black"));
 	rectMode(RADIUS);
-	text("You Win", 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
+	text("You Win", 0,canvasPanelOffset, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   }
   
 }
