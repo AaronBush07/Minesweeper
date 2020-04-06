@@ -164,11 +164,10 @@ function mousePressed() {
   let y = Math.floor(mouseY / sqSize);
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
-  	  if (gameOver == false)
+  	  if (gameOver == false && win == false)
   	  {
 		  if(mouseButton == LEFT)
 		  {
-			  //console.log("Mouse pressed at:", x, y);   
 			propagateClick(x, y);  
 
 		  } else 
