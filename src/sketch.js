@@ -217,7 +217,7 @@ function mousePressed() {
 			} else if (openBoxes == minesLeft)
 			{
 				win = true;
-				console.log(openBoxes, minesLeft);
+				//console.log(openBoxes, minesLeft);
 			}
 	  }
   }
@@ -266,7 +266,7 @@ function propagateClick(x, y, middle=false) {
 	  		gameOver = true;
 	  	}  
 	}
-	console.log(minesLeft, openBoxes);
+	//console.log(minesLeft, openBoxes);
 }
 
 
