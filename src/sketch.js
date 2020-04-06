@@ -5,17 +5,20 @@ https://github.com/AaronBush07
 */
 
 
-const canvasX = 500;
-const canvasY = 800;
-const mines = 100;
-const sqX = 20;
-const sqY = 32;
-const sqSize = 25;
+/*
+Global variables. 
+*/
+let canvasX = 500;
+let canvasY = 800;
+let mines = 100;
+let sqX = 20;
+let sqY = 32;
+let sqSize = 25; //Square size
 let cnv;
-var mineBoxArray = new Array(sqX);
+let mineBoxArray = new Array(sqX); 
 let miningArray = [];
 let debug = false;
-let fr = 10;
+let fr = 10; //Framerate
 let flagSrc = "../img/flag-svgrepo-com.svg";
 let mineSrc = "../img/rg1024_sea_mine.svg";
 let shipSrc = "../img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
