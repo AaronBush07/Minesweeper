@@ -240,7 +240,10 @@ function propagateClick(x, y, middle=false) {
     	if (middle == false || middle == true && mBA.flagsAdj >= mBA.minesAdj)
     	{
 			mBA.clicked();
-			openBoxes--;
+			if (middle == false)
+			{ 
+				openBoxes--;
+			}
     		
     	}
 	  	if ((mBA.minesAdj == 0 && mBA.mine == false && middle == false) || 
@@ -263,7 +266,7 @@ function propagateClick(x, y, middle=false) {
 	  		gameOver = true;
 	  	}  
 	}
-
+	console.log(minesLeft, openBoxes);
 }
 
 
