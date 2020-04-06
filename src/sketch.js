@@ -66,6 +66,7 @@ function createGame() {
 	win = false;
 	openBoxes = sqX * sqY;
 	let counter = 0;
+	noTint();
 	for (let i = 0; i < sqX; i++) 
 	{
 		mineBoxArray[i] = new Array(sqY);
@@ -137,6 +138,7 @@ function scanAdjacent(x, y, scanType) {
 function setup() {
   // put setup code here
   frameRate(fr);
+
   cnv = createCanvas(canvasX, canvasY);
   let counter = createGame();
   console.log("Mineboxes created: " + counter);
@@ -146,11 +148,13 @@ function setup() {
 }
 
 function keyTyped() {
+	loop();
 	if (key === 'r' || key === 'R') {
 		console.log("Game reset");
 		let counter = createGame();
   		console.log("Mineboxes created: " + counter);
 	}
+	noLoop();
 }
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
@@ -197,7 +201,10 @@ function mousePressed() {
 		  {
 		  	
 		  	//console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
-		  	propagateClick(x, y, true)
+		  	if (mineBoxArray[x][y].isFlagged == false) 
+		  	{
+		  	  propagateClick(x, y, true)
+		  	}
 		  }
 
 		  if (gameOver == true)
@@ -228,15 +235,16 @@ Recursive function to look for open spaces when they are clicked.
 */
 function propagateClick(x, y, middle=false) {
 	let mBA = mineBoxArray[x][y];
-	if((mBA.isOpen == false && mBA.isFlagged == false) || middle)
+	if((mBA.isOpen == false && mBA.isFlagged == false) || middle) 
     {
     	if (middle == false || middle == true && mBA.flagsAdj >= mBA.minesAdj)
     	{
-    		mBA.clicked();
-    		openBoxes--;
+			mBA.clicked();
+			openBoxes--;
+    		
     	}
-	  	if ((mBA.minesAdj == 0 && mBA.mine == false) || 
-	  		(middle && mBA.flagsAdj >= mBA.minesAdj))
+	  	if ((mBA.minesAdj == 0 && mBA.mine == false && middle == false) || 
+	  		(middle && mBA.flagsAdj >= mBA.minesAdj && mBA.isFlagged == false))
 	  	{
 	  		for (let xMin = x-1; xMin <= x+1; xMin++)
 			{
