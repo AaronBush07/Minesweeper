@@ -8,16 +8,17 @@ https://github.com/AaronBush07
 /*
 Global variables. 
 */
+
+let canvasPanelOffset = 50;
 let canvasX = 500;
-let canvasY = 800;
-let canvasPanelOffset = 100;
+let canvasY = 800+canvasPanelOffset;
 let mines = 100;
 let sqX = 20;
 let sqY = 32;
 let sqSize = 25; //Square size
 let cnv;
 let mineBoxArray = new Array(sqX); 
-let miningArray = [];
+let miningArray;
 let debug = false;
 let fr = 10; //Framerate
 let flagSrc = "../img/flag-svgrepo-com.svg";
@@ -32,6 +33,7 @@ let gameOver;
 let win;
 let openBoxes = 0;
 let minesLeft = 0;
+
 /**
  * Randomly shuffle an array
  * https://stackoverflow.com/a/2450976/1293256
@@ -69,6 +71,7 @@ function createGame() {
 	gameOver = false;
 	win = false;
 	openBoxes = sqX * sqY;
+	miningArray = [];
 	let counter = 0;
 	noTint();
 	for (let i = 0; i < sqX; i++) 
@@ -110,11 +113,16 @@ function createGame() {
    return counter;
 }
 
+//Disable right click menu
 document.oncontextmenu = function(event) {
   event.preventDefault();
   return false;
 }
 
+/*
+Helper function to scan adjacent blocks. Will either mark mines adjacent, 
+or count the number of flags nearby. 
+*/
 function scanAdjacent(x, y, scanType) {
 	for (let xMin = x-1; xMin <= x+1; xMin++)
 	{
@@ -166,7 +174,7 @@ function mousePressed() {
   loop();
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor((mouseY-canvasPanelOffset) / sqSize);
-  console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
+  //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
   if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
   {
   	  if (gameOver == false && win == false)
