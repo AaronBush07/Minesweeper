@@ -20,7 +20,6 @@ let cnv;
 let mineBoxArray = new Array(sqX); 
 let miningArray;
 let debug = false;
-let fr = 10; //Framerate
 let flagSrc = "../img/flag-svgrepo-com.svg";
 let mineSrc = "../img/rg1024_sea_mine.svg";
 let shipSrc = "../img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
@@ -40,7 +39,7 @@ let minesLeft = 0;
  * @param  {Array} array The array to shuffle
  * @return {String}      The first item in the shuffled array
  */
-var shuffle = function (array) {
+var shuffleArray = function (array) {
 
 	var currentIndex = array.length;
 	var temporaryValue, randomIndex;
@@ -87,13 +86,10 @@ function createGame() {
 	/*
 	Shuffle the mining array. Then populate with mines. 
 	*/
-	//console.dir(miningArray);
-	miningArray = shuffle(miningArray);
-	//console.dir(miningArray);
+	miningArray = shuffleArray(miningArray);
 	for (let i = 0; i < mines; i++)
 	{
 		let mine = str(miningArray[i]).split(" ");
-		//console.log("Planting mine at: ", mine);
 		mineBoxArray[int(mine[0])][int(mine[1])].mine = true;
 	}
 	minesLeft = mines;
@@ -149,8 +145,6 @@ function scanAdjacent(x, y, scanType) {
 
 function setup() {
   // put setup code here
-  frameRate(fr);
-
   cnv = createCanvas(canvasX, canvasY);
   let counter = createGame();
   console.log("Mineboxes created: " + counter);
@@ -160,18 +154,16 @@ function setup() {
 }
 
 function keyTyped() {
-	loop();
 	if (key === 'r' || key === 'R') {
 		console.log("Game reset");
 		let counter = createGame();
   		console.log("Mineboxes created: " + counter);
 	}
-	noLoop();
+	redraw();
 }
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
 function mousePressed() {
-  loop();
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor((mouseY-canvasPanelOffset) / sqSize);
   //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
@@ -231,7 +223,9 @@ function mousePressed() {
 				win = true;
 				//console.log(openBoxes, minesLeft);
 			}
+	  redraw();
 	  }
+	  
   }
 }
 
@@ -239,7 +233,6 @@ function mouseReleased() {
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
   //console.log("Mouse released at:", x, y);
-  noLoop();
 }
 
 /*
@@ -302,22 +295,22 @@ function draw() {
   }
   if (gameOver) {
   	tint(255, 100);
-  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY));
+  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   	textAlign(CENTER, CENTER);
 	textStyle(BOLD);
 	textSize(50);
 	fill(color("black"));
 	rectMode(RADIUS);
-	text("Game Over", 0,0, min(shipX, canvasX), min(shipY,canvasY));
+	text("Game Over", 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   } else if (win) {
   	tint(255, 100);
-  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY));
+  	image(shipImg, 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   	textAlign(CENTER, CENTER);
 	textStyle(BOLD);
 	textSize(50);
 	fill(color("black"));
 	rectMode(RADIUS);
-	text("You Win", 0,0, min(shipX, canvasX), min(shipY,canvasY));
+	text("You Win", 0,0, min(shipX, canvasX), min(shipY,canvasY)+canvasPanelOffset);
   }
   
 }
