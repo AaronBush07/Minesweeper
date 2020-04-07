@@ -149,6 +149,7 @@ function setup() {
   let counter = createGame();
   console.log("Mineboxes created: " + counter);
   cnv.mousePressed();
+  cnv.doubleClicked(dblClick);
   noLoop();
   
 }
@@ -160,6 +161,24 @@ function keyTyped() {
   		console.log("Mineboxes created: " + counter);
 	}
 	redraw();
+}
+
+function dblClick() {
+	console.log("doubleClicked");
+	let x = Math.floor(mouseX / sqSize);
+  	let y = Math.floor((mouseY-canvasPanelOffset) / sqSize);
+  	if ((x >= 0 && x < sqX) && (y >= 0 && y < sqY))
+	{
+		if (gameOver == false && win == false)
+	  	{
+	  		if (mineBoxArray[x][y].isFlagged == false) 
+		  	{
+		  	  propagateClick(x, y, true);
+		  	}
+		  	checkForGameOver();
+	    	redraw();
+	  	}
+	}
 }
 
 /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
@@ -174,9 +193,8 @@ function mousePressed() {
 		  if(mouseButton == LEFT)
 		  {
 			propagateClick(x, y);  
-
-		  } else 
-		  if(mouseButton == RIGHT)
+		  } 
+		  else if(mouseButton == RIGHT)
 		  {
 		  	 //place flag
 		  	 mineBoxArray[x][y].flag();
@@ -207,25 +225,13 @@ function mousePressed() {
 		  	//console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
 		  	if (mineBoxArray[x][y].isFlagged == false) 
 		  	{
-		  	  propagateClick(x, y, true)
+		  	  propagateClick(x, y, true);
 		  	}
 		  }
 
-		  if (gameOver == true)
-			{
-				for (let i = 0; i < mines; i++) 
-				{
-					let mine = str(miningArray[i]).split(" ");
-					mineBoxArray[int(mine[0])][int(mine[1])].clicked();
-				}
-			} else if (openBoxes == minesLeft)
-			{
-				win = true;
-				//console.log(openBoxes, minesLeft);
-			}
-	  redraw();
-	  }
-	  
+		checkForGameOver();
+	    redraw();
+	  }  
   }
 }
 
@@ -233,6 +239,21 @@ function mouseReleased() {
   let x = Math.floor(mouseX / sqSize);
   let y = Math.floor(mouseY / sqSize);
   //console.log("Mouse released at:", x, y);
+}
+
+function checkForGameOver() {
+	if (gameOver == true)
+	{
+		for (let i = 0; i < mines; i++) 
+		{
+			let mine = str(miningArray[i]).split(" ");
+			mineBoxArray[int(mine[0])][int(mine[1])].clicked();
+		}
+	} else if (openBoxes == minesLeft)
+	{
+		win = true;
+		//console.log(openBoxes, minesLeft);
+	}
 }
 
 /*
