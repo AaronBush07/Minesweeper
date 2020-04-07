@@ -240,7 +240,7 @@ Recursive function to look for open spaces when they are clicked.
 */
 function propagateClick(x, y, middle=false) {
 	let mBA = mineBoxArray[x][y];
-	if((mBA.isOpen == false && mBA.isFlagged == false) || middle) 
+	if((mBA.isOpen == false && mBA.isFlagged == false && middle == false) || (middle && mBA.isOpen))
     {
     	if (middle == false || middle == true && mBA.flagsAdj >= mBA.minesAdj)
     	{
