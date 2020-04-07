@@ -249,6 +249,10 @@ function propagateClick(x, y, middle=false) {
 			{ 
 				openBoxes--;
 			}
+			if (middle) 
+			{
+				console.log(mBA, "middle registered");
+			}
     		
     	}
 	  	if ((mBA.minesAdj == 0 && mBA.mine == false && middle == false) || 
