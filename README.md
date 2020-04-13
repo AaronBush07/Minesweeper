@@ -4,7 +4,8 @@ Currently only works in Google Chrome.
 To play:
 https://hungry-sinoussi-0a9efe.netlify.com/src/
 
-Controls: 
+# Controls:
+
 Left click - Open square
 
 Right click - Plant flag
