@@ -2,7 +2,7 @@
 Currently only works in Google Chrome. 
 
 To play:
-https://aaronbush07-minesweeper.netlify.com/src/
+https://aaronbush07-minesweeper.netlify.com/
 
 # Controls:
 
