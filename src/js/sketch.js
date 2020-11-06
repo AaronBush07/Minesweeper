@@ -8,7 +8,7 @@ import p5 from 'p5';
 import '../css/style.scss';
 import Game from './game.js';
 
-let canvasPanelOffset = 50;
+const canvasPanelOffset = 50;
 const canvasX = 500;
 const canvasY = 800 + canvasPanelOffset;
 
@@ -29,7 +29,7 @@ const sqSize = 25;
 
 const sketch = p => {
   window.p = p;
-  const mineSweeper = new Game(p, canvasPanelOffset, sqSize);
+  const mineSweeper = new Game(canvasPanelOffset, sqSize);
 
   function display(mineBox, win=false) {
     //console.log(mineBox.x, mineBox.y);

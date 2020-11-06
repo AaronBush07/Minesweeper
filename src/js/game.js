@@ -1,15 +1,13 @@
 import Minebox from './mineBox.js'
 
 export default class Game {
-  constructor(p,canvasPanelOffset, sqSize = 25) {
+  constructor(canvasPanelOffset, sqSize = 25) {
     /**Set properties */
-    this._p = p;
     this._canvasPanelOffset = canvasPanelOffset;
     this._mines = 100;
     this._sqX = 20;
     this._sqY = 32;
     this._sqSize = 25; //Square size
-    this._cnv;
     this._mineBoxArray = new Array(this._sqX);
     this._miningArray;
     this._debug = false;
