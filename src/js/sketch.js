@@ -62,7 +62,8 @@ const sketch = p => {
     p.rectMode(p.CORNER);
     p.square(mineBox.x, mineBox.y, sqSize);
 
-    if (mineBox.flagged == true) {
+    if (mineBox.isFlagged == true) {
+      console.log("flagged");
       p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       //Game is over, mark wrongly placed mines. 
       if (mineSweeper.gameOver && mineBox.mine == false) {
@@ -80,7 +81,7 @@ const sketch = p => {
         p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       }
 
-    } else if (mineBox.flagged == false && mineBox.mine == true) {
+    } else if (mineBox.isFlagged == false && mineBox.mine == true) {
       if (mineBox.isOpen == true) {
         p.image(mineImg, mineBox.x, mineBox.y, sqSize, sqSize);
       }
@@ -136,7 +137,7 @@ const sketch = p => {
   }
 
   p.keyTyped = () => {
-    if (key === 'r' || key === 'R') {
+    if (p.key === 'r' || p.key === 'R') {
       console.log("Game reset");
       p.noTint();
       mineSweeper.createGame();
@@ -187,7 +188,7 @@ const sketch = p => {
           }
           else {
             mineSweeper.scanAdjacent(x, y, "flagRemove");
-            if (mineBoxArray[x][y].mine) {
+            if (mineSweeper.mineBoxArray[x][y].mine) {
               mineSweeper.incrementMinesLeft();
               mineSweeper.incrementOpenBoxes();
             }
@@ -259,22 +260,22 @@ const sketch = p => {
     }
     if (mineSweeper.gameOver) {
       p.tint(255, 100);
-      p.image(shipImg, 0, canvasPanelOffset, min(shipX, canvasX), min(shipY, canvasY) + canvasPanelOffset);
+      p.image(shipImg, 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
       p.textAlign(p.CENTER, p.CENTER);
       p.textStyle(p.BOLD);
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("Game Over", 0, canvasPanelOffset, min(shipX, canvasX), min(shipY, canvasY) + canvasPanelOffset);
+      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
     } else if (mineSweeper.win) {
       p.tint(255, 100);
-      p.image(shipImg, 0, canvasPanelOffset, min(shipX, canvasX), min(shipY, canvasY) + canvasPanelOffset);
+      p.image(shipImg, 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
       p.textAlign(p.CENTER, p.CENTER);
       p.textStyle(p.BOLD);
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("You Win", 0, canvasPanelOffset, min(shipX, canvasX), min(shipY, canvasY) + canvasPanelOffset);
+      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
     }
   }
 
