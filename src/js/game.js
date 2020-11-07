@@ -49,6 +49,7 @@ export default class Game {
     this._openBoxes = this._sqX * this._sqY;
     this._miningArray = [];
     let counter = 0;
+    this._flaggedBox = 100;
     for (let i = 0; i < this._sqX; i++) {
       this._mineBoxArray[i] = new Array(this._sqY);
       for (let k = 0; k < this._sqY; k++) {
