@@ -12,8 +12,8 @@ const canvasPanelOffset = 50;
 const canvasX = 500;
 const canvasY = 800 + canvasPanelOffset;
 
-const flagSrc = "./img/flag-svgrepo-com.svg";
-const mineSrc = "./img/rg1024_sea_mine.svg";
+const flagSrc = "./img/flag-svgrepo-com";
+const mineSrc = "./img/rg1024_sea_mine";
 const shipSrc = "./img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
 
 let mineImg;
@@ -120,9 +120,19 @@ const sketch = p => {
     p.strokeWeight(1);
   }
 
+
   p.preload = () => {
-    flagImg = p.loadImage(flagSrc);
-    mineImg = p.loadImage(mineSrc);
+    /**Firefox workaround.  */
+    if(typeof InstallTrigger !== 'undefined')
+    {
+      flagImg = p.loadImage(flagSrc+".jpg");
+      mineImg = p.loadImage(mineSrc+".jpg");
+    }
+    else
+    {
+      flagImg = p.loadImage(flagSrc+".svg");
+      mineImg = p.loadImage(mineSrc+".svg");
+    }
     shipImg = p.loadImage(shipSrc);
   }
 
