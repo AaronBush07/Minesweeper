@@ -15,6 +15,7 @@ export default class Game {
     this._win;
     this._openBoxes = 0;
     this._minesLeft = 0;
+    this._flaggedBox = 100;
   }
 
   /*
@@ -116,7 +117,17 @@ export default class Game {
     }
   }
 
+  flag(x, y) {
+    if (this._mineBoxArray[x][y].isFlagged)
+      this._flaggedBox++;
+    else
+      this._flaggedBox--;
+    this._mineBoxArray[x][y].flag();
+  }
 
+  get flaggedBox() {
+    return this._flaggedBox;
+  }
   get minesLeft() {
     return this._minesLeft;
   }

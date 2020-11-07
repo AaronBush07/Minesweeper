@@ -188,7 +188,7 @@ const sketch = p => {
         }
         else if (mButton == 'RIGHT') {
           //place flag
-          mineSweeper.mineBoxArray[x][y].flag();
+          mineSweeper.flag(x,y);
           if (mineSweeper.mineBoxArray[x][y].isFlagged) {
             mineSweeper.scanAdjacent(x, y, "flagAdd");
             if (mineSweeper.mineBoxArray[x][y].mine) {
@@ -265,7 +265,7 @@ const sketch = p => {
     p.textAlign(p.CENTER, p.CENTER);
     p.textStyle(p.BOLD);
     p.textSize(30);
-    p.text(String(mineSweeper.minesLeft), 0, 0, sqSize*4, canvasPanelOffset);
+    p.text(String(mineSweeper.flaggedBox), 0, 0, sqSize*4, canvasPanelOffset);
   }
 
   p.draw = () => {
