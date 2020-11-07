@@ -3,17 +3,17 @@ Aaron Bush
 https://github.com/AaronBush07
 2020
 */
-"use strict"
+"use strict";
 import p5 from 'p5';
 import '../css/style.scss';
 import Game from './game.js';
 
-let canvasPanelOffset = 50;
+const canvasPanelOffset = 50;
 const canvasX = 500;
 const canvasY = 800 + canvasPanelOffset;
 
-const flagSrc = "./img/flag-svgrepo-com.svg";
-const mineSrc = "./img/rg1024_sea_mine.svg";
+const flagSrc = "./img/flag-svgrepo-com";
+const mineSrc = "./img/rg1024_sea_mine";
 const shipSrc = "./img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
 
 let mineImg;
@@ -29,7 +29,7 @@ const sqSize = 25;
 
 const sketch = p => {
   window.p = p;
-  const mineSweeper = new Game(p, canvasPanelOffset, sqSize);
+  const mineSweeper = new Game(canvasPanelOffset, sqSize);
 
   function display(mineBox, win=false) {
     //console.log(mineBox.x, mineBox.y);
@@ -120,9 +120,19 @@ const sketch = p => {
     p.strokeWeight(1);
   }
 
+
   p.preload = () => {
-    flagImg = p.loadImage(flagSrc);
-    mineImg = p.loadImage(mineSrc);
+    /**Firefox workaround.  */
+    if(typeof InstallTrigger !== 'undefined')
+    {
+      flagImg = p.loadImage(flagSrc+".jpg");
+      mineImg = p.loadImage(mineSrc+".jpg");
+    }
+    else
+    {
+      flagImg = p.loadImage(flagSrc+".svg");
+      mineImg = p.loadImage(mineSrc+".svg");
+    }
     shipImg = p.loadImage(shipSrc);
   }
 
@@ -246,6 +256,16 @@ const sketch = p => {
     p.strokeWeight(2);
     p.fill(p.color("white"));
     p.rect(0, 0, canvasX, canvasPanelOffset);
+    p.rect(0,0, sqSize * 4, canvasPanelOffset);
+    p.rect(canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
+    console.log(canvasX - (sqSize * 4));
+
+    p.rectMode(p.RADIUS);
+    p.fill(p.color("red"));
+    p.textAlign(p.CENTER, p.CENTER);
+    p.textStyle(p.BOLD);
+    p.textSize(30);
+    p.text(String(mineSweeper.minesLeft), 0, 0, sqSize*4, canvasPanelOffset);
   }
 
   p.draw = () => {

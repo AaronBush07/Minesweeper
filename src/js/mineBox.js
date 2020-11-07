@@ -46,7 +46,7 @@ export default class Minebox {
   get y() {
     return this._y;
   }
-  
+
   get minesAdj() {
     return this._minesAdj;
   }

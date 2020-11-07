@@ -1,6 +1,4 @@
 # Recreating Minesweeper in Javascript and Processing. 
-Currently only works in Google Chrome. 
-
 To play:
 https://aaronbush07-minesweeper.netlify.com/
 
