@@ -256,6 +256,16 @@ const sketch = p => {
     p.strokeWeight(2);
     p.fill(p.color("white"));
     p.rect(0, 0, canvasX, canvasPanelOffset);
+    p.rect(0,0, sqSize * 4, canvasPanelOffset);
+    p.rect(canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
+    console.log(canvasX - (sqSize * 4));
+
+    p.rectMode(p.RADIUS);
+    p.fill(p.color("red"));
+    p.textAlign(p.CENTER, p.CENTER);
+    p.textStyle(p.BOLD);
+    p.textSize(30);
+    p.text(String(mineSweeper.minesLeft), 0, 0, sqSize*4, canvasPanelOffset);
   }
 
   p.draw = () => {
