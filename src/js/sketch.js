@@ -265,7 +265,7 @@ const sketch = p => {
     p.textAlign(p.CENTER, p.CENTER);
     p.textStyle(p.BOLD);
     p.textSize(30);
-    p.text(String(mineSweeper.flaggedBox), 0, 0, sqSize*4, canvasPanelOffset);
+    p.text(Math.max(0, String(mineSweeper.flaggedBox)), 0, 0, sqSize*4, canvasPanelOffset);
   }
 
   p.draw = () => {
