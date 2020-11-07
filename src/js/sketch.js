@@ -3,7 +3,7 @@ Aaron Bush
 https://github.com/AaronBush07
 2020
 */
-"use strict"
+"use strict";
 import p5 from 'p5';
 import '../css/style.scss';
 import Game from './game.js';

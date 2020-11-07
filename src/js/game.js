@@ -164,7 +164,7 @@ export default class Game {
   get win() {
     return this._win;
   }
-  
+
   get sqY() {
     return this._sqY;
   }
