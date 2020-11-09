@@ -187,20 +187,23 @@ const sketch = p => {
           propagateClick(x, y);
         }
         else if (mButton == 'RIGHT') {
-          //place flag
-          mineSweeper.flag(x,y);
-          if (mineSweeper.mineBoxArray[x][y].isFlagged) {
-            mineSweeper.scanAdjacent(x, y, "flagAdd");
-            if (mineSweeper.mineBoxArray[x][y].mine) {
-              mineSweeper.reduceMinesLeft();
-              mineSweeper.reduceOpenBoxes();
+          //place flag on closed boxes. 
+          if (mineSweeper.mineBoxArray[x][y].isOpen == false)
+          {
+            mineSweeper.flag(x,y);
+            if (mineSweeper.mineBoxArray[x][y].isFlagged) {
+              mineSweeper.scanAdjacent(x, y, "flagAdd");
+              if (mineSweeper.mineBoxArray[x][y].mine) {
+                mineSweeper.reduceMinesLeft();
+                mineSweeper.reduceOpenBoxes();
+              }
             }
-          }
-          else {
-            mineSweeper.scanAdjacent(x, y, "flagRemove");
-            if (mineSweeper.mineBoxArray[x][y].mine) {
-              mineSweeper.incrementMinesLeft();
-              mineSweeper.incrementOpenBoxes();
+            else {
+              mineSweeper.scanAdjacent(x, y, "flagRemove");
+              if (mineSweeper.mineBoxArray[x][y].mine) {
+                mineSweeper.incrementMinesLeft();
+                mineSweeper.incrementOpenBoxes();
+              }
             }
           }
         }
