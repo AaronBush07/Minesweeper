@@ -45,7 +45,7 @@ const sketch = p => {
       }
     }
     else if (mineBox.mine == true) {
-      if (mineBox.flagged)
+      if (mineBox.isFlagged)
         p.fill(p.color("white"));
       else
         p.fill(p.color("red"));
@@ -63,7 +63,7 @@ const sketch = p => {
     p.square(mineBox.x, mineBox.y, sqSize);
 
     if (mineBox.isFlagged == true) {
-      console.log("flagged");
+      //console.log("flagged");
       p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       //Game is over, mark wrongly placed mines. 
       if (mineSweeper.gameOver && mineBox.mine == false) {
