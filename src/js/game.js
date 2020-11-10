@@ -115,7 +115,7 @@ export default class Game {
         this._mineBoxArray[Number(mine[0])][Number(mine[1])].clicked();
       }
     } else if (this._openBoxes == this._minesLeft) {
-      win = true;
+      this._win = true;
       //console.log(openBoxes, minesLeft);
     }
   }
