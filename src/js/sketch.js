@@ -8,9 +8,11 @@ import p5 from 'p5';
 import '../css/style.scss';
 import Game from './game.js';
 
-const canvasPanelOffset = 50;
-const canvasX = 500;
-const canvasY = 800 + canvasPanelOffset;
+/** All pixels should be a multiple of sqSize. */
+const sqSize = 25;
+const canvasPanelOffset = 2 * sqSize;
+const canvasX = 20 * sqSize;
+const canvasY = 32 * sqSize + canvasPanelOffset;
 
 const flagSrc = "./img/flag-svgrepo-com";
 const mineSrc = "./img/rg1024_sea_mine";
@@ -25,7 +27,7 @@ const debug = false;
 const shipX = 640;
 const shipY = 425;
 
-const sqSize = 25;
+
 
 const sketch = p => {
   p.disableFriendlyErrors = true;
@@ -281,11 +283,12 @@ const sketch = p => {
   }
 
   function displayPanel() {
+    p.rectMode(p.CORNER);
     p.strokeWeight(2);
     p.fill(p.color("white"));
     p.rect(0, 0, canvasX, canvasPanelOffset);
-    p.rect(0,0, sqSize * 4, canvasPanelOffset);
-    p.rect(canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
+    p.rect(0, 0, sqSize * 4, canvasPanelOffset);
+    p.rect((canvasX - (sqSize * 4)), 0, (sqSize*4), canvasPanelOffset);
     //console.log(canvasX - (sqSize * 4));
     p.rectMode(p.RADIUS);
     p.fill(p.color("red"));

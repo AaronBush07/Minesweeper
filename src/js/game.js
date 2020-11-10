@@ -7,7 +7,7 @@ export default class Game {
     this._mines = 100;
     this._sqX = 20;
     this._sqY = 32;
-    this._sqSize = 25; //Square size
+    this._sqSize = sqSize; //Square size
     this._mineBoxArray = new Array(this._sqX);
     this._miningArray;
     this._debug = false;
