@@ -24,20 +24,21 @@ export default class Game {
   or count the number of flags nearby. 
   */
   scanAdjacent(x, y, scanType) {
-    for (let xMin = x - 1; xMin <= x + 1; xMin++) {
-      if (xMin < 0 || xMin >= this._sqX) continue
-      for (let yMin = y - 1; yMin <= y + 1; yMin++) {
-        if (yMin < 0 || yMin >= this._sqY) continue
+    for (let xMin = Math.max(x-1, 0); xMin <= Math.min(this._sqX-1, x+1); xMin++)
+    {
+      for (let yMin = Math.max(y-1, 0); yMin <= Math.min(this._sqY-1, y+1); yMin++)
+      {
+        let mBA = this._mineBoxArray[xMin][yMin];
         if (xMin == x && yMin == y) continue
         if (scanType == "mine") {
-          if (this._mineBoxArray[xMin][yMin].isMined) {
+          if (mBA.isMined) {
+            /**Check if adj box is mined. Then increment minesAdj for the given box. */
             this._mineBoxArray[x][y].incrementMinesAdj();
           }
         } else if (scanType == "flagRemove") {
-          this._mineBoxArray[xMin][yMin].reduceFlagAdj();
+          mBA.reduceFlagAdj();
         } else if (scanType == "flagAdd") {
-          this._mineBoxArray[xMin][yMin].incrementFlagAdj();
-          //console.log("Flags added", xMin,yMin,mineBoxArray[x][y].flagsAdj);
+          mBA.incrementFlagAdj();
         }
       }
     }
@@ -56,7 +57,7 @@ export default class Game {
       this._mineBoxArray[i] = new Array(this._sqY);
       for (let k = 0; k < this._sqY; k++) {
         this._mineBoxArray[i][k] = new Minebox(i * this._sqSize, k * this._sqSize, this._canvasPanelOffset, this._sqSize);
-        this._miningArray.push(i + " " + k);
+        this._miningArray.push([i, k]);
         counter++;
       }
     }
@@ -65,7 +66,7 @@ export default class Game {
     */
     this._miningArray = this.shuffleArray(this._miningArray);
     for (let i = 0; i < this._mines; i++) {
-      let mine = String(this._miningArray[i]).split(" ");
+      let mine = this._miningArray[i];
       this._mineBoxArray[Number(mine[0])][Number(mine[1])].mine = true;
     }
     this._minesLeft = this._mines;
@@ -111,7 +112,7 @@ export default class Game {
   checkForGameOver() {
     if (this._gameOver == true) {
       for (let i = 0; i < this._mines; i++) {
-        let mine = String(this._miningArray[i]).split(" ");
+        let mine = this._miningArray[i];
         this._mineBoxArray[Number(mine[0])][Number(mine[1])].clicked();
       }
     } else if (this._openBoxes == this._minesLeft) {

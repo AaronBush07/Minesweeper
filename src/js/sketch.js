@@ -96,7 +96,7 @@ const sketch = p => {
     p.strokeWeight(1);
   }
 
-  /**Seperating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
+  /**Separating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
   function displayText() {
     p.rectMode(p.RADIUS);
     p.textAlign(p.CENTER, p.CENTER);
@@ -151,7 +151,7 @@ const sketch = p => {
     }
     shipImg = p.loadImage(shipSrc);
 
-    /**Resize the images for perfomance */
+    /**Resize the images for performance */
     flagImg.resize(sqSize, 0);
     mineImg.resize(sqSize, 0);
   }
@@ -317,7 +317,9 @@ const sketch = p => {
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
+      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
+      p.textSize(30);
+      p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
     } else if (mineSweeper.win) {
       clearInterval(sketchTime);
       p.tint(255, 100);
@@ -327,7 +329,9 @@ const sketch = p => {
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
+      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
+      p.textSize(30);
+      p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
     }
   }
 
