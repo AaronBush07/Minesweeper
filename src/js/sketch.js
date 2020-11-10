@@ -8,24 +8,29 @@ import p5 from 'p5';
 import '../css/style.scss';
 import Game from './game.js';
 
-const canvasPanelOffset = 50;
-const canvasX = 500;
-const canvasY = 800 + canvasPanelOffset;
+/** All pixels should be a multiple of sqSize. */
+const sqSize = 25;
+const canvasPanelOffset = 2 * sqSize;
+const canvasX = 20 * sqSize;
+const canvasY = 32 * sqSize + canvasPanelOffset;
 
 const flagSrc = "./img/flag-svgrepo-com";
 const mineSrc = "./img/rg1024_sea_mine";
 const shipSrc = "./img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
 
-let mineImg;
-let shipImg;
-let flagImg;
+const smileSrc = "./img/slightly-smiling-face_1f642.png";
+const winSrc = "./img/smiling-face-with-sunglasses_1f60e.png";
+const loseSrc = "./img/shocked-face-with-exploding-head_1f92f.png";
+
+let mineImg, shipImg, flagImg;
+let smileImg, winImg, loseImg;
 
 const debug = false;
 
 const shipX = 640;
 const shipY = 425;
 
-const sqSize = 25;
+
 
 const sketch = p => {
   p.disableFriendlyErrors = true;
@@ -96,7 +101,7 @@ const sketch = p => {
     p.strokeWeight(1);
   }
 
-  /**Seperating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
+  /**Separating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
   function displayText() {
     p.rectMode(p.RADIUS);
     p.textAlign(p.CENTER, p.CENTER);
@@ -137,6 +142,16 @@ const sketch = p => {
     /**Redraw upon update */
   };
 
+  function resetGame() {
+    console.log("Game reset");
+    p.noTint();
+    clearInterval(sketchTime);
+    sketchTime = setInterval(gameTimer, 1000);
+    mineSweeper.createGame();
+    p.redraw();
+  };
+
+  /**Load all images to be used */
   p.preload = () => {
     /**Firefox workaround.  */
     if(typeof InstallTrigger !== 'undefined')
@@ -151,9 +166,17 @@ const sketch = p => {
     }
     shipImg = p.loadImage(shipSrc);
 
-    /**Resize the images for perfomance */
+    smileImg = p.loadImage(smileSrc);
+    winImg = p.loadImage(winSrc);
+    loseImg = p.loadImage(loseSrc);
+
+    /**Resize the images for performance */
     flagImg.resize(sqSize, 0);
     mineImg.resize(sqSize, 0);
+    smileImg.resize(canvasPanelOffset,0);
+    winImg.resize(canvasPanelOffset,0);
+    loseImg.resize(canvasPanelOffset, 0);
+
   }
 
   p.setup = () => {
@@ -168,11 +191,7 @@ const sketch = p => {
 
   p.keyTyped = () => {
     if (p.key === 'r' || p.key === 'R') {
-      console.log("Game reset");
-      p.noTint();
-      clearInterval(sketchTime);
-      sketchTime = setInterval(gameTimer, 1000);
-      mineSweeper.createGame();
+      resetGame();
     }
     p.redraw();
   }
@@ -203,44 +222,55 @@ const sketch = p => {
   
 
   function mouseLogic(mX, mY, mButton) {
-    let x = Math.floor(mX / sqSize);
-    let y = Math.floor((mY - canvasPanelOffset) / sqSize);
-    //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
-    if ((x >= 0 && x < mineSweeper.sqX) && (y >= 0 && y < mineSweeper.sqY)) {
-      if (mineSweeper.gameOver == false && mineSweeper.win == false) {
-        if (mButton == 'LEFT') {
-          propagateClick(x, y);
-        }
-        else if (mButton == 'RIGHT') {
-          //place flag on closed boxes. 
-          if (mineSweeper.mineBoxArray[x][y].isOpen == false)
-          {
-            mineSweeper.flag(x,y);
-            if (mineSweeper.mineBoxArray[x][y].isFlagged) {
-              mineSweeper.scanAdjacent(x, y, "flagAdd");
-              if (mineSweeper.mineBoxArray[x][y].isMined) {
-                mineSweeper.reduceMinesLeft();
-                mineSweeper.reduceOpenBoxes();
+    if (mY < canvasPanelOffset && mY >= 0)
+    {
+      let xMin = canvasX/2 - canvasPanelOffset/2;
+      let xMax = canvasX/2 + canvasPanelOffset/2;
+      if (mX >= xMin && mX <= xMax) {
+        /**Reset */
+        resetGame();
+      }
+    }
+    else {
+      let x = Math.floor(mX / sqSize);
+      let y = Math.floor((mY - canvasPanelOffset) / sqSize);
+      //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
+      if ((x >= 0 && x < mineSweeper.sqX) && (y >= 0 && y < mineSweeper.sqY)) {
+        if (mineSweeper.gameOver == false && mineSweeper.win == false) {
+          if (mButton == 'LEFT') {
+            propagateClick(x, y);
+          }
+          else if (mButton == 'RIGHT') {
+            //place flag on closed boxes. 
+            if (mineSweeper.mineBoxArray[x][y].isOpen == false)
+            {
+              mineSweeper.flag(x,y);
+              if (mineSweeper.mineBoxArray[x][y].isFlagged) {
+                mineSweeper.scanAdjacent(x, y, "flagAdd");
+                if (mineSweeper.mineBoxArray[x][y].isMined) {
+                  mineSweeper.reduceMinesLeft();
+                  mineSweeper.reduceOpenBoxes();
+                }
               }
-            }
-            else {
-              mineSweeper.scanAdjacent(x, y, "flagRemove");
-              if (mineSweeper.mineBoxArray[x][y].isMined) {
-                mineSweeper.incrementMinesLeft();
-                mineSweeper.incrementOpenBoxes();
+              else {
+                mineSweeper.scanAdjacent(x, y, "flagRemove");
+                if (mineSweeper.mineBoxArray[x][y].isMined) {
+                  mineSweeper.incrementMinesLeft();
+                  mineSweeper.incrementOpenBoxes();
+                }
               }
             }
           }
-        }
-        else if (mButton == 'CENTER') {
-          //console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
-          if (mineSweeper.mineBoxArray[x][y].isFlagged == false) {
-            propagateClick(x, y, true);
+          else if (mButton == 'CENTER') {
+            //console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
+            if (mineSweeper.mineBoxArray[x][y].isFlagged == false) {
+              propagateClick(x, y, true);
+            }
           }
-        }
 
-        mineSweeper.checkForGameOver();
-        p.redraw();
+          mineSweeper.checkForGameOver();
+          p.redraw();
+        }
       }
     }
   }
@@ -281,13 +311,16 @@ const sketch = p => {
   }
 
   function displayPanel() {
+    p.rectMode(p.CORNER);
     p.strokeWeight(2);
     p.fill(p.color("white"));
     p.rect(0, 0, canvasX, canvasPanelOffset);
-    p.rect(0,0, sqSize * 4, canvasPanelOffset);
-    p.rect(canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
+    p.rect(0, 0, sqSize * 4, canvasPanelOffset);
+    p.rect((canvasX - (sqSize * 4)), 0, (sqSize*4), canvasPanelOffset);
     //console.log(canvasX - (sqSize * 4));
+    p.rect(canvasX/2-canvasPanelOffset/2, 0, canvasPanelOffset, canvasPanelOffset);
     p.rectMode(p.RADIUS);
+    p.image(mineSweeper.win ? winImg : (mineSweeper.gameOver ? loseImg : smileImg), canvasX/2-canvasPanelOffset/2, 0, canvasPanelOffset, canvasPanelOffset);
     p.fill(p.color("red"));
     p.textAlign(p.CENTER, p.CENTER);
     p.textStyle(p.BOLD);
@@ -317,7 +350,9 @@ const sketch = p => {
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
+      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
+      p.textSize(30);
+      p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
     } else if (mineSweeper.win) {
       clearInterval(sketchTime);
       p.tint(255, 100);
@@ -327,7 +362,9 @@ const sketch = p => {
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
+      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
+      p.textSize(30);
+      p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
     }
   }
 
