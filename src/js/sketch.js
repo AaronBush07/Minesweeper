@@ -93,34 +93,42 @@ const sketch = p => {
         p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       }
     }
-    p.rectMode(p.RADIUS);
-    if (mineBox.minesAdj > 0 && mineBox.isOpen == true) {
-      switch (mineBox.minesAdj) {
-        case 1: p.fill(p.color("blue"));
-          break;
-        case 2: p.fill(p.color("red"));
-          break;
-        case 3: p.fill(p.color("green"));
-          break;
-        case 4: p.fill(p.color("gold"));
-          break;
-        case 5: p.fill(p.color("magenta"));
-          break;
-        case 6: p.fill(p.color("sienna"));
-          break;
-        case 7: p.fill(p.color("pink"));
-          break;
-        case 8: p.fill(p.color("black"));
-          break;
-        default: p.fill(0, 102, 153);
-      }
-
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textStyle(p.BOLD);
-      p.textSize(20);
-      p.text(String(mineBox.minesAdj), mineBox.x, mineBox.y, sqSize, sqSize);
-    }
     p.strokeWeight(1);
+  }
+
+  /**Seperating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
+  function displayText() {
+    p.rectMode(p.RADIUS);
+    p.textAlign(p.CENTER, p.CENTER);
+    p.textStyle(p.BOLD);
+    p.textSize(20);
+    for (let i = 0; i < mineSweeper.sqX; i++) {
+      for (let k = 0; k < mineSweeper.sqY; k++) {
+        let mineBox = mineSweeper.mineBoxArray[i][k];
+        if (mineBox.minesAdj > 0 && mineBox.isOpen == true) {
+          switch (mineBox.minesAdj) {
+            case 1: p.fill(p.color("blue"));
+              break;
+            case 2: p.fill(p.color("red"));
+              break;
+            case 3: p.fill(p.color("green"));
+              break;
+            case 4: p.fill(p.color("gold"));
+              break;
+            case 5: p.fill(p.color("magenta"));
+              break;
+            case 6: p.fill(p.color("sienna"));
+              break;
+            case 7: p.fill(p.color("pink"));
+              break;
+            case 8: p.fill(p.color("black"));
+              break;
+            default: p.fill(0, 102, 153);
+          }
+          p.text(String(mineBox.minesAdj), mineBox.x, mineBox.y, sqSize, sqSize);
+        }
+      }
+    }
   }
 
   function gameTimer() {
@@ -298,6 +306,7 @@ const sketch = p => {
         display(mineSweeper.mineBoxArray[i][k], mineSweeper.win);
       }
     }
+    displayText();
     if (mineSweeper.gameOver) {
       /**Stop timer */
       clearInterval(sketchTime);
@@ -310,6 +319,7 @@ const sketch = p => {
       p.rectMode(p.RADIUS);
       p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
     } else if (mineSweeper.win) {
+      clearInterval(sketchTime);
       p.tint(255, 100);
       p.image(shipImg, 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
       p.textAlign(p.CENTER, p.CENTER);
