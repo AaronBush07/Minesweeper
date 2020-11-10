@@ -36,7 +36,7 @@ const sketch = p => {
     if (mineBox.isOpen == false) {
       p.fill(p.color("white"));
       if (debug == true) {
-        if (mineBox.mine == true) {
+        if (mineBox.isMined == true) {
           p.fill(p.color("papayawhip"));
         }
         else if (mineBox.minesAdj == 0) {
@@ -44,7 +44,7 @@ const sketch = p => {
         }
       }
     }
-    else if (mineBox.mine == true) {
+    else if (mineBox.isMined) {
       if (mineBox.isFlagged)
         p.fill(p.color("white"));
       else
@@ -66,7 +66,7 @@ const sketch = p => {
       //console.log("flagged");
       p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       //Game is over, mark wrongly placed mines. 
-      if (mineSweeper.gameOver && mineBox.mine == false) {
+      if (mineSweeper.gameOver && mineBox.isMined == false) {
         //X to mark wrong mine. 
         p.image(mineImg, mineBox.x, mineBox.y, sqSize, sqSize);
         p.fill(p.color("red"));
@@ -81,7 +81,7 @@ const sketch = p => {
         p.image(flagImg, mineBox.x, mineBox.y, sqSize, sqSize);
       }
 
-    } else if (mineBox.isFlagged == false && mineBox.mine == true) {
+    } else if (mineBox.isFlagged == false && mineBox.isMined) {
       if (mineBox.isOpen == true) {
         p.image(mineImg, mineBox.x, mineBox.y, sqSize, sqSize);
       }
@@ -141,7 +141,7 @@ const sketch = p => {
     let cnv = p.createCanvas(canvasX, canvasY);
     //cnv.parent('sketch');
     mineSweeper.createGame();
-    cnv.mousePressed();
+    //cnv.mousePressed();
     cnv.doubleClicked(p.dblClick);
     p.noLoop();
   }
@@ -157,12 +157,13 @@ const sketch = p => {
 
   p.dblClick = () => {
     console.log("doubleClicked");
-    mouseLogic(x, y, 'CENTER');
+    mouseLogic(p.mouseX, p.mouseY, 'CENTER');
   }
 
   /*Mouse pressed somewhere on canvas. Calculate the location based on mouse*/
   p.mousePressed = () => {
     let mButton;
+    console.log("Mouse Pressed");
     switch (p.mouseButton) {
       case p.LEFT: mButton = 'LEFT'; break;
       case p.RIGHT: mButton = 'RIGHT'; break;
@@ -193,14 +194,14 @@ const sketch = p => {
             mineSweeper.flag(x,y);
             if (mineSweeper.mineBoxArray[x][y].isFlagged) {
               mineSweeper.scanAdjacent(x, y, "flagAdd");
-              if (mineSweeper.mineBoxArray[x][y].mine) {
+              if (mineSweeper.mineBoxArray[x][y].isMined) {
                 mineSweeper.reduceMinesLeft();
                 mineSweeper.reduceOpenBoxes();
               }
             }
             else {
               mineSweeper.scanAdjacent(x, y, "flagRemove");
-              if (mineSweeper.mineBoxArray[x][y].mine) {
+              if (mineSweeper.mineBoxArray[x][y].isMined) {
                 mineSweeper.incrementMinesLeft();
                 mineSweeper.incrementOpenBoxes();
               }
@@ -236,7 +237,7 @@ const sketch = p => {
         }
 
       }
-      if ((mBA.minesAdj == 0 && mBA.mine == false && middle == false) ||
+      if ((mBA.minesAdj == 0 && mBA.isMined == false && middle == false) ||
         (middle && mBA.flagsAdj >= mBA.minesAdj && mBA.isFlagged == false)) {
         for (let xMin = x - 1; xMin <= x + 1; xMin++) {
           if (xMin < 0 || xMin >= mineSweeper.sqX) continue
@@ -248,7 +249,7 @@ const sketch = p => {
         }
 
       }
-      else if (mBA.mine) {
+      else if (mBA.isMined) {
         mineSweeper.explode();
       }
     }
@@ -261,8 +262,7 @@ const sketch = p => {
     p.rect(0, 0, canvasX, canvasPanelOffset);
     p.rect(0,0, sqSize * 4, canvasPanelOffset);
     p.rect(canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
-    console.log(canvasX - (sqSize * 4));
-
+    //console.log(canvasX - (sqSize * 4));
     p.rectMode(p.RADIUS);
     p.fill(p.color("red"));
     p.textAlign(p.CENTER, p.CENTER);

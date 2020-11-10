@@ -1,5 +1,5 @@
+"use strict";
 import Minebox from './mineBox.js'
-
 export default class Game {
   constructor(canvasPanelOffset, sqSize = 25) {
     /**Set properties */
@@ -29,7 +29,7 @@ export default class Game {
         if (yMin < 0 || yMin >= this._sqY) continue
         if (xMin == x && yMin == y) continue
         if (scanType == "mine") {
-          if (this._mineBoxArray[xMin][yMin].mine) {
+          if (this._mineBoxArray[xMin][yMin].isMined) {
             this._mineBoxArray[x][y].incrementMinesAdj();
           }
         } else if (scanType == "flagRemove") {
@@ -72,7 +72,7 @@ export default class Game {
     for (let i = 0; i < this._sqX; i++) {
       for (let k = 0; k < this._sqY; k++) {
         /*If no mines present in selected box*/
-        if (this._mineBoxArray[i][k].mine == false) {
+        if (this._mineBoxArray[i][k].isMined == false) {
           this.scanAdjacent(i, k, "mine");
         }
       }

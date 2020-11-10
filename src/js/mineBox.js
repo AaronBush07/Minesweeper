@@ -1,3 +1,4 @@
+"use strict";
 export default class Minebox {
 
   constructor(x, y, canvasPanelOffset, sqSize) {
@@ -55,7 +56,7 @@ export default class Minebox {
     return this._isOpen;
   }
 
-  get mine() {
+  get isMined() {
     return this._mine;
   }
 
