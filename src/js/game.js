@@ -16,6 +16,7 @@ export default class Game {
     this._openBoxes = 0;
     this._minesLeft = 0;
     this._flaggedBox = 100;
+    this._timer = 0;
   }
 
   /*
@@ -49,6 +50,7 @@ export default class Game {
     this._openBoxes = this._sqX * this._sqY;
     this._miningArray = [];
     let counter = 0;
+    this._timer = 0;
     this._flaggedBox = 100;
     for (let i = 0; i < this._sqX; i++) {
       this._mineBoxArray[i] = new Array(this._sqY);
@@ -116,6 +118,14 @@ export default class Game {
       win = true;
       //console.log(openBoxes, minesLeft);
     }
+  }
+
+  incrementTimer() {
+    this._timer++;
+  }
+
+  get timer() {
+    return this._timer;
   }
 
   flag(x, y) {

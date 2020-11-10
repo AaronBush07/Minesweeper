@@ -28,8 +28,11 @@ const shipY = 425;
 const sqSize = 25;
 
 const sketch = p => {
+  p.disableFriendlyErrors = true;
   window.p = p;
   const mineSweeper = new Game(canvasPanelOffset, sqSize);
+
+  let sketchTime;
 
   function display(mineBox, win=false) {
     //console.log(mineBox.x, mineBox.y);
@@ -120,6 +123,11 @@ const sketch = p => {
     p.strokeWeight(1);
   }
 
+  function gameTimer() {
+    mineSweeper.incrementTimer();
+    p.redraw();
+    /**Redraw upon update */
+  };
 
   p.preload = () => {
     /**Firefox workaround.  */
@@ -134,22 +142,28 @@ const sketch = p => {
       mineImg = p.loadImage(mineSrc+".svg");
     }
     shipImg = p.loadImage(shipSrc);
+
+    /**Resize the images for perfomance */
+    flagImg.resize(sqSize, 0);
+    mineImg.resize(sqSize, 0);
   }
 
   p.setup = () => {
     // put setup code here
     let cnv = p.createCanvas(canvasX, canvasY);
-    //cnv.parent('sketch');
     mineSweeper.createGame();
     //cnv.mousePressed();
     cnv.doubleClicked(p.dblClick);
     p.noLoop();
+    sketchTime = setInterval(gameTimer, 1000);
   }
 
   p.keyTyped = () => {
     if (p.key === 'r' || p.key === 'R') {
       console.log("Game reset");
       p.noTint();
+      clearInterval(sketchTime);
+      sketchTime = setInterval(gameTimer, 1000);
       mineSweeper.createGame();
     }
     p.redraw();
@@ -177,6 +191,8 @@ const sketch = p => {
     let y = Math.floor(p.mouseY / sqSize);
     //console.log("Mouse released at:", x, y);
   }
+
+  
 
   function mouseLogic(mX, mY, mButton) {
     let x = Math.floor(mX / sqSize);
@@ -269,6 +285,7 @@ const sketch = p => {
     p.textStyle(p.BOLD);
     p.textSize(30);
     p.text(Math.max(0, String(mineSweeper.flaggedBox)), 0, 0, sqSize*4, canvasPanelOffset);
+    p.text(Math.max(0, (String(mineSweeper.timer)).padStart(3,"0")), canvasX - (sqSize * 4), 0, sqSize*4, canvasPanelOffset);
   }
 
   p.draw = () => {
@@ -282,6 +299,8 @@ const sketch = p => {
       }
     }
     if (mineSweeper.gameOver) {
+      /**Stop timer */
+      clearInterval(sketchTime);
       p.tint(255, 100);
       p.image(shipImg, 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
       p.textAlign(p.CENTER, p.CENTER);
