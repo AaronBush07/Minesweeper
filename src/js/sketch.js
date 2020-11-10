@@ -18,9 +18,12 @@ const flagSrc = "./img/flag-svgrepo-com";
 const mineSrc = "./img/rg1024_sea_mine";
 const shipSrc = "./img/noaa-MmblG0TlcS0-unsplash.jpg"; //Photo by NOAA on Unsplash
 
-let mineImg;
-let shipImg;
-let flagImg;
+const smileSrc = "./img/slightly-smiling-face_1f642.png";
+const winSrc = "./img/smiling-face-with-sunglasses_1f60e.png";
+const loseSrc = "./img/shocked-face-with-exploding-head_1f92f.png";
+
+let mineImg, shipImg, flagImg;
+let smileImg, winImg, loseImg;
 
 const debug = false;
 
@@ -139,6 +142,16 @@ const sketch = p => {
     /**Redraw upon update */
   };
 
+  function resetGame() {
+    console.log("Game reset");
+    p.noTint();
+    clearInterval(sketchTime);
+    sketchTime = setInterval(gameTimer, 1000);
+    mineSweeper.createGame();
+    p.redraw();
+  };
+
+  /**Load all images to be used */
   p.preload = () => {
     /**Firefox workaround.  */
     if(typeof InstallTrigger !== 'undefined')
@@ -153,9 +166,17 @@ const sketch = p => {
     }
     shipImg = p.loadImage(shipSrc);
 
+    smileImg = p.loadImage(smileSrc);
+    winImg = p.loadImage(winSrc);
+    loseImg = p.loadImage(loseSrc);
+
     /**Resize the images for performance */
     flagImg.resize(sqSize, 0);
     mineImg.resize(sqSize, 0);
+    smileImg.resize(canvasPanelOffset,0);
+    winImg.resize(canvasPanelOffset,0);
+    loseImg.resize(canvasPanelOffset, 0);
+
   }
 
   p.setup = () => {
@@ -170,11 +191,7 @@ const sketch = p => {
 
   p.keyTyped = () => {
     if (p.key === 'r' || p.key === 'R') {
-      console.log("Game reset");
-      p.noTint();
-      clearInterval(sketchTime);
-      sketchTime = setInterval(gameTimer, 1000);
-      mineSweeper.createGame();
+      resetGame();
     }
     p.redraw();
   }
@@ -205,44 +222,55 @@ const sketch = p => {
   
 
   function mouseLogic(mX, mY, mButton) {
-    let x = Math.floor(mX / sqSize);
-    let y = Math.floor((mY - canvasPanelOffset) / sqSize);
-    //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
-    if ((x >= 0 && x < mineSweeper.sqX) && (y >= 0 && y < mineSweeper.sqY)) {
-      if (mineSweeper.gameOver == false && mineSweeper.win == false) {
-        if (mButton == 'LEFT') {
-          propagateClick(x, y);
-        }
-        else if (mButton == 'RIGHT') {
-          //place flag on closed boxes. 
-          if (mineSweeper.mineBoxArray[x][y].isOpen == false)
-          {
-            mineSweeper.flag(x,y);
-            if (mineSweeper.mineBoxArray[x][y].isFlagged) {
-              mineSweeper.scanAdjacent(x, y, "flagAdd");
-              if (mineSweeper.mineBoxArray[x][y].isMined) {
-                mineSweeper.reduceMinesLeft();
-                mineSweeper.reduceOpenBoxes();
+    if (mY < canvasPanelOffset && mY >= 0)
+    {
+      let xMin = canvasX/2 - canvasPanelOffset/2;
+      let xMax = canvasX/2 + canvasPanelOffset/2;
+      if (mX >= xMin && mX <= xMax) {
+        /**Reset */
+        resetGame();
+      }
+    }
+    else {
+      let x = Math.floor(mX / sqSize);
+      let y = Math.floor((mY - canvasPanelOffset) / sqSize);
+      //console.log(mouseX, mouseY, mouseY-canvasPanelOffset)
+      if ((x >= 0 && x < mineSweeper.sqX) && (y >= 0 && y < mineSweeper.sqY)) {
+        if (mineSweeper.gameOver == false && mineSweeper.win == false) {
+          if (mButton == 'LEFT') {
+            propagateClick(x, y);
+          }
+          else if (mButton == 'RIGHT') {
+            //place flag on closed boxes. 
+            if (mineSweeper.mineBoxArray[x][y].isOpen == false)
+            {
+              mineSweeper.flag(x,y);
+              if (mineSweeper.mineBoxArray[x][y].isFlagged) {
+                mineSweeper.scanAdjacent(x, y, "flagAdd");
+                if (mineSweeper.mineBoxArray[x][y].isMined) {
+                  mineSweeper.reduceMinesLeft();
+                  mineSweeper.reduceOpenBoxes();
+                }
               }
-            }
-            else {
-              mineSweeper.scanAdjacent(x, y, "flagRemove");
-              if (mineSweeper.mineBoxArray[x][y].isMined) {
-                mineSweeper.incrementMinesLeft();
-                mineSweeper.incrementOpenBoxes();
+              else {
+                mineSweeper.scanAdjacent(x, y, "flagRemove");
+                if (mineSweeper.mineBoxArray[x][y].isMined) {
+                  mineSweeper.incrementMinesLeft();
+                  mineSweeper.incrementOpenBoxes();
+                }
               }
             }
           }
-        }
-        else if (mButton == 'CENTER') {
-          //console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
-          if (mineSweeper.mineBoxArray[x][y].isFlagged == false) {
-            propagateClick(x, y, true);
+          else if (mButton == 'CENTER') {
+            //console.log("Middle button clicked", mineBoxArray[x][y].flagsAdj);
+            if (mineSweeper.mineBoxArray[x][y].isFlagged == false) {
+              propagateClick(x, y, true);
+            }
           }
-        }
 
-        mineSweeper.checkForGameOver();
-        p.redraw();
+          mineSweeper.checkForGameOver();
+          p.redraw();
+        }
       }
     }
   }
@@ -290,7 +318,9 @@ const sketch = p => {
     p.rect(0, 0, sqSize * 4, canvasPanelOffset);
     p.rect((canvasX - (sqSize * 4)), 0, (sqSize*4), canvasPanelOffset);
     //console.log(canvasX - (sqSize * 4));
+    p.rect(canvasX/2-canvasPanelOffset/2, 0, canvasPanelOffset, canvasPanelOffset);
     p.rectMode(p.RADIUS);
+    p.image(mineSweeper.win ? winImg : (mineSweeper.gameOver ? loseImg : smileImg), canvasX/2-canvasPanelOffset/2, 0, canvasPanelOffset, canvasPanelOffset);
     p.fill(p.color("red"));
     p.textAlign(p.CENTER, p.CENTER);
     p.textStyle(p.BOLD);
