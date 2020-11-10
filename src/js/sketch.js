@@ -30,8 +30,6 @@ const debug = false;
 const shipX = 640;
 const shipY = 425;
 
-
-
 const sketch = p => {
   p.disableFriendlyErrors = true;
   window.p = p;
@@ -219,8 +217,6 @@ const sketch = p => {
     //console.log("Mouse released at:", x, y);
   }
 
-  
-
   function mouseLogic(mX, mY, mButton) {
     if (mY < canvasPanelOffset && mY >= 0)
     {
@@ -307,7 +303,6 @@ const sketch = p => {
         mineSweeper.explode();
       }
     }
-    //console.log(minesLeft, openBoxes);
   }
 
   function displayPanel() {
@@ -340,7 +335,7 @@ const sketch = p => {
       }
     }
     displayText();
-    if (mineSweeper.gameOver) {
+    if (mineSweeper.gameOver || mineSweeper.win) {
       /**Stop timer */
       clearInterval(sketchTime);
       p.tint(255, 100);
@@ -350,22 +345,10 @@ const sketch = p => {
       p.textSize(50);
       p.fill(p.color("black"));
       p.rectMode(p.RADIUS);
-      p.text("Game Over", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
+      p.text(mineSweeper.gameOver ? "Game Over" : "You Win!", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
       p.textSize(30);
       p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
-    } else if (mineSweeper.win) {
-      clearInterval(sketchTime);
-      p.tint(255, 100);
-      p.image(shipImg, 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY, canvasY) + canvasPanelOffset);
-      p.textAlign(p.CENTER, p.CENTER);
-      p.textStyle(p.BOLD);
-      p.textSize(50);
-      p.fill(p.color("black"));
-      p.rectMode(p.RADIUS);
-      p.text("You Win", 0, canvasPanelOffset, Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
-      p.textSize(30);
-      p.text("Press 'r' to restart", 0, canvasPanelOffset+(shipY/2), Math.min(shipX, canvasX), Math.min(shipY/2, canvasY) + canvasPanelOffset);
-    }
+    } 
   }
 
   //Disable right click menu
@@ -377,6 +360,3 @@ const sketch = p => {
 };
 
 new p5(sketch);
-
-
-
