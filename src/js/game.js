@@ -1,5 +1,5 @@
+"use strict";
 import Minebox from './mineBox.js'
-
 export default class Game {
   constructor(canvasPanelOffset, sqSize = 25) {
     /**Set properties */
@@ -16,6 +16,7 @@ export default class Game {
     this._openBoxes = 0;
     this._minesLeft = 0;
     this._flaggedBox = 100;
+    this._timer = 0;
   }
 
   /*
@@ -29,7 +30,7 @@ export default class Game {
         if (yMin < 0 || yMin >= this._sqY) continue
         if (xMin == x && yMin == y) continue
         if (scanType == "mine") {
-          if (this._mineBoxArray[xMin][yMin].mine) {
+          if (this._mineBoxArray[xMin][yMin].isMined) {
             this._mineBoxArray[x][y].incrementMinesAdj();
           }
         } else if (scanType == "flagRemove") {
@@ -49,6 +50,7 @@ export default class Game {
     this._openBoxes = this._sqX * this._sqY;
     this._miningArray = [];
     let counter = 0;
+    this._timer = 0;
     this._flaggedBox = 100;
     for (let i = 0; i < this._sqX; i++) {
       this._mineBoxArray[i] = new Array(this._sqY);
@@ -72,7 +74,7 @@ export default class Game {
     for (let i = 0; i < this._sqX; i++) {
       for (let k = 0; k < this._sqY; k++) {
         /*If no mines present in selected box*/
-        if (this._mineBoxArray[i][k].mine == false) {
+        if (this._mineBoxArray[i][k].isMined == false) {
           this.scanAdjacent(i, k, "mine");
         }
       }
@@ -116,6 +118,14 @@ export default class Game {
       win = true;
       //console.log(openBoxes, minesLeft);
     }
+  }
+
+  incrementTimer() {
+    this._timer++;
+  }
+
+  get timer() {
+    return this._timer;
   }
 
   flag(x, y) {
