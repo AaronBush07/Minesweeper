@@ -24,10 +24,8 @@ export default class Game {
   or count the number of flags nearby. 
   */
   scanAdjacent(x, y, scanType) {
-    for (let xMin = Math.max(x-1, 0); xMin <= Math.min(this._sqX-1, x+1); xMin++)
-    {
-      for (let yMin = Math.max(y-1, 0); yMin <= Math.min(this._sqY-1, y+1); yMin++)
-      {
+    for (let xMin = Math.max(x - 1, 0); xMin <= Math.min(this._sqX - 1, x + 1); xMin++) {
+      for (let yMin = Math.max(y - 1, 0); yMin <= Math.min(this._sqY - 1, y + 1); yMin++) {
         let mBA = this._mineBoxArray[xMin][yMin];
         if (xMin == x && yMin == y) continue
         if (scanType == "mine") {
@@ -116,7 +114,9 @@ export default class Game {
         this._mineBoxArray[Number(mine[0])][Number(mine[1])].clicked();
       }
     } else if (this._openBoxes == this._minesLeft) {
+      /**Number of Open Boxes matches the number of mines left = auto win. */
       this._win = true;
+      this._flaggedBox = 0;
       //console.log(openBoxes, minesLeft);
     }
   }
