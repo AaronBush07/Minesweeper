@@ -24,10 +24,8 @@ export default class Game {
   or count the number of flags nearby. 
   */
   scanAdjacent(x, y, scanType) {
-    for (let xMin = Math.max(x-1, 0); xMin <= Math.min(this._sqX-1, x+1); xMin++)
-    {
-      for (let yMin = Math.max(y-1, 0); yMin <= Math.min(this._sqY-1, y+1); yMin++)
-      {
+    for (let xMin = Math.max(x - 1, 0); xMin <= Math.min(this._sqX - 1, x + 1); xMin++) {
+      for (let yMin = Math.max(y - 1, 0); yMin <= Math.min(this._sqY - 1, y + 1); yMin++) {
         let mBA = this._mineBoxArray[xMin][yMin];
         if (xMin == x && yMin == y) continue
         if (scanType == "mine") {
