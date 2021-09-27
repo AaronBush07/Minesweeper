@@ -1,47 +1,41 @@
-const webpack = require('webpack');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const webpack = require('webpack').default;
 
 module.exports = {
-  devtool: "inline-sourcemap",
-  entry: __dirname + '/src/js/sketch.js',
+  devtool: false,
+  entry: __dirname + "/src/js/sketch.ts",
   output: {
-    path: __dirname + '/dist/',
-    publicPath: '/',
-    filename: 'js/sketch.js'
+    path: path.resolve(__dirname,"/dist/"),
+    publicPath: "/",
+    filename: "js/sketch.ts",
+    library: { name: "sketch", type: "umd" },
   },
   devServer: {
-    inline: true,
     hot: true,
-    port: 3333
+    port: 3333,
+  },
+  resolve: {
+    // Add `.ts` and `.tsx` as a resolvable extension.
+    extensions: [".ts", ".tsx", ".js"]
   },
   module: {
-    rules: [{
-        test: /\.js$/,
+    rules: [
+      {
+        test: /\.ts$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          }
-        }
+        loader: "ts-loader"
       },
       {
         test: /\.scss$/,
-        loader: "style-loader!css-loader!sass-loader"
-      }
-    ]
-  },
-  plugins: [
-    new CopyWebpackPlugin({
-      patterns: [{
-          from: 'src/index.html',
-          to: 'index.html'
+        loader: "sass-loader",
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/,
+        loader: "file-loader",
+        options: {
+          name: "[path][name].[ext]",
         },
-        {
-          from: 'src/img',
-          to: 'img'
-        }
-      ],
-    })
-  ]
-}
+      },
+    ],
+  },
+};
