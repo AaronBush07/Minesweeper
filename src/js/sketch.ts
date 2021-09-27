@@ -349,7 +349,7 @@ const sketch = (p: p5) => {
       canvasPanelOffset
     );
     p.text(
-      Math.max(0, String(mineSweeper.timer).padStart(3, "0")),
+      String(mineSweeper.timer).padStart(3, "0"),
       canvasX - sqSize * 4,
       0,
       sqSize * 4,
