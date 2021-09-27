@@ -39,7 +39,7 @@ const sketch = (p: p5) => {
   let sketchTime;
 
   /**Load all images to be used */
-  p.preload = () => {
+  p.preload = (): void => {
     /**Firefox workaround.  */
     if (typeof InstallTrigger !== "undefined") {
       flagImg = p.loadImage(flagSrc + ".jpg");
@@ -116,7 +116,7 @@ const sketch = (p: p5) => {
   };
 
   /**Separating text from display has contributed to speedboost due to less calls to p.text methods which are resource heavy*/
-  const displayText = () => {
+  const displayText = (): void => {
     p.rectMode(p.RADIUS);
     p.textAlign(p.CENTER, p.CENTER);
     p.textStyle(p.BOLD);
@@ -221,22 +221,22 @@ const sketch = (p: p5) => {
   };
 
   p.mouseReleased = (): void => {
-    let x = Math.floor(p.mouseX / sqSize);
-    let y = Math.floor(p.mouseY / sqSize);
+    let x:number = Math.floor(p.mouseX / sqSize);
+    let y:number = Math.floor(p.mouseY / sqSize);
     //console.log("Mouse released at:", x, y);
   };
 
   function mouseLogic(mX: number, mY: number, mButton: string): void {
     if (mY < canvasPanelOffset && mY >= 0) {
-      let xMin = canvasX / 2 - canvasPanelOffset / 2;
-      let xMax = canvasX / 2 + canvasPanelOffset / 2;
+      const xMin:number = canvasX / 2 - canvasPanelOffset / 2;
+      const xMax:number = canvasX / 2 + canvasPanelOffset / 2;
       if (mX >= xMin && mX <= xMax) {
         /**Reset */
         resetGame();
       }
     } else {
-      let x = Math.floor(mX / sqSize);
-      let y = Math.floor((mY - canvasPanelOffset) / sqSize);
+      const x = Math.floor(mX / sqSize);
+      const y = Math.floor((mY - canvasPanelOffset) / sqSize);
       //console.log(mX, mY, mY - canvasPanelOffset);
       if (x >= 0 && x < mineSweeper.sqX && y >= 0 && y < mineSweeper.sqY) {
         if (mineSweeper.gameOver === false && mineSweeper.win === false) {

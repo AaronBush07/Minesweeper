@@ -23,7 +23,7 @@ export default class Minebox {
     this.sqSize = sqSize;
   }
 
-  clicked() {
+  clicked(): void {
     //console.log("Hey I was clicked");
     this.isOpen = true;
   }

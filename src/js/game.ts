@@ -37,7 +37,7 @@ export default class Game {
   Helper function to scan adjacent blocks. Will either mark mines adjacent, 
   or count the number of flags nearby. 
   */
-  scanAdjacent(x:number, y:number, scanType:string) {
+  scanAdjacent(x:number, y:number, scanType:string): void {
     for (
       let xMin:number = Math.max(x - 1, 0);
       xMin <= Math.min(this.sqX - 1, x + 1);
@@ -65,7 +65,7 @@ export default class Game {
   }
 
   /**Create and reset a game */
-  createGame() {
+  createGame(): void {
     this.gameOver = false;
     this.win = false;
     this.openBoxes = this.sqX * this.sqY;
@@ -115,7 +115,7 @@ export default class Game {
    * @param  {Array} array The array to shuffle
    * @return {String}      The first item in the shuffled array
    */
-  shuffleArray(array) {
+  shuffleArray(array: any[]): any[] {
     let currentIndex = array.length;
     let temporaryValue, randomIndex;
 
@@ -134,7 +134,7 @@ export default class Game {
     return array;
   }
 
-  checkForGameOver() {
+  checkForGameOver(): void {
     if (this.gameOver == true) {
       for (let i = 0; i < this.mines; i++) {
         let mine = this.miningArray[i];
@@ -148,33 +148,33 @@ export default class Game {
     }
   }
 
-  incrementTimer() {
+  incrementTimer(): void {
     this.timer++;
   }
 
-  flag(x, y) {
+  flag(x, y): void {
     if (this.mineBoxArray[x][y].flagged) this.flaggedBox++;
     else this.flaggedBox--;
     this.mineBoxArray[x][y].flag();
   }
 
-  incrementMinesLeft() {
+  incrementMinesLeft(): void {
     this.minesLeft++;
   }
 
-  reduceMinesLeft() {
+  reduceMinesLeft(): void {
     this.minesLeft--;
   }
 
-  incrementOpenBoxes() {
+  incrementOpenBoxes(): void {
     this.openBoxes++;
   }
 
-  reduceOpenBoxes() {
+  reduceOpenBoxes(): void {
     this.openBoxes--;
   }
 
-  explode() {
+  explode(): void {
     this.gameOver = true;
   }
 }
