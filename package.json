@@ -4,9 +4,9 @@
   "description": "Boilerplate for writing p5.js sketches in es6 with babel, webpack and sass.",
   "scripts": {
     "clean": "rimraf dist",
-    "dev": "webpack-dev-server --progress --inline --hot --open",
+    "dev": "parcel src/index.html",
     "prebuild": "npm install",
-    "build": "npm run clean && webpack --progress --colors -p"
+    "build": "npm run clean && parcel build src/index.html"
   },
   "repository": {
     "type": "git",
@@ -21,19 +21,16 @@
   "dependencies": {
     "@types/p5": "^1.3.1",
     "img": "^3.0.3",
-    "p5": "1.1.9"
+    "p5": "1.1.9",
+    "parcel-bundler": "^1.12.5"
   },
   "devDependencies": {
     "@babel/core": "7.11.1",
     "@babel/preset-env": "7.11.0",
-    "babel-loader": "8.1.0",
     "node-sass": "4.14.1",
     "parcel-plugin-asset-copier": "^1.1.0",
     "rimraf": "3.0.2",
-    "typescript": "^4.4.3",
-    "webpack": "5.0.0",
-    "webpack-cli": "4.8.0",
-    "webpack-dev-server": "4.3.0"
+    "typescript": "^4.4.3"
   },
   "assetsPath": "src/img"
 }
